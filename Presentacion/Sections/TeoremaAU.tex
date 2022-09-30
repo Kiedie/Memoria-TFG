@@ -1,0 +1,51 @@
+\section{Teorema de Aproximación Universal}
+
+\subsection{Antecedentes}
+\begin{frame}
+    \begin{itemize}
+        \item Teorema de Hahn-Banach
+        \item Teorema de Representación de Riesz para funcionales lineales en $C_0(X)$
+    \end{itemize}
+
+    \begin{corollary}
+    Sea $X$ un espacio normado, $M$ un subespacio de $X$. Si $x_0 \not\in \overline{M}$, existe un $f \in X^*$ tal que $f(x) = 0$ para todo $ x \in M$, $f(x_0) = 1$ y $||f|| = \frac{1}{d}$ donde $d=dist(x_0,M)$
+    \end{corollary}
+    
+\end{frame} 
+
+\subsection{Resultado}
+\begin{frame}
+    \begin{overprint}
+    \onslide<1>
+        \begin{theorem}[Teorema de la Aproximación Universal - G.Cybenko]
+           Sea $\sigma$ una función continua sigmoidal. Entonces la suma finita dada por 
+               \begin{equation}
+                   G(x) = \sum_{j=1}^N \alpha_j \sigma(x_j^T x + \theta_j)
+               \end{equation}
+           \noindent es densa en $C(I_n)$. En otras palabras, dada cualquier función $f \in C(I_n)$ y $\epsilon > 0$, existe una suma G(X) que viene dada por la expresión de arriba de tal manera que 
+           \begin{equation}
+               |G(x) - f(x)| < \epsilon \quad \forall x \in I_n
+           \end{equation}
+        \end{theorem}
+        
+        
+    \onslide<2>
+            \begin{theorem}[Teorema de la Aproximación Universal - G.Cybenko]
+           Sea $\sigma$ una función continua sigmoidal. Entonces la suma finita dada por 
+               \begin{equation}
+                   G(x) = \sum_{j=1}^N \alpha_j \sigma(x_j^T x + \theta_j)
+               \end{equation}
+           \noindent es densa en $C(I_n)$. En otras palabras, dada cualquier función $f \in C(I_n)$ y $\epsilon > 0$, existe una suma G(X) que viene dada por la expresión de arriba de tal manera que 
+           \begin{equation}
+               |G(x) - f(x)| < \epsilon \quad \forall x \in I_n
+           \end{equation}
+        \end{theorem}
+        
+    
+        \begin{itemize}
+            \item Existe una versión para problemas de clasificación
+            \item Existen versiones con otras funciones de activación (ReLu, $\tanh$,...)
+        \end{itemize}
+        
+\end{overprint}
+\end{frame}
