@@ -1,0 +1,268 @@
+% !TeX root = ../libro.tex
+% !TeX encoding = utf8
+
+\setchapterpreamble[c][0.75\linewidth]{%
+	\sffamily
+	
+    En este capítulo se verá que las combinaciones lineales finitas de composiciones de una función fija univariante y un conjunto de funcionales afines pueden aproximar uniformemente a cualquier función continua de $n$ variables reales con soporte en el hipercubo unitario. En particular, se mostrará que regiones de decisión arbitrarias pueden ser aproximadas por redes neuronales con una sola capa oculta  y cualquier función sigmoidal continua. Además se discutirá las propiedades de aproximación de otros posibles tipos de no linealidades que podrían ser implementadas por redes neuronales artificiales. \\
+    
+    Se comenzará el capítulo mostrando algunas definiciones elementales de topología como el concepto de recubrimiento por abiertos, la propiedad de compacidad y espacios Hausdorff así como del análisis funcional ya que se presentarán la dualidad de los espacios normados y el concepto de funcional sublineal. Estos conceptos son necesarios ya que están presentes tanto en la demostración del teorema de la aproximación universal como en los dos teoremas que subyacen detrás de ésta, los cuales serán introducidos a continuación. Estos teoremas son dos grandes resultados del análisis funcional. El primero es el famoso teorema de Han-Banach, que se presentará junto con su teorema de extensión y un corolario. A continuación se presentará el teorema de representación de Riesz para posteriormente introducir al lector de lleno en el teorema clave de este capítulo. \\
+    
+    Para entender el teorema de la aproximación universal es necesario redefinir el concepto de función sigmoidal que es la que usa el autor del teorema. Para adentrarse en la demostración resulta necesario definir el concepto de función discriminatoria y dar un lema que relaciona las funciones sigmoidales con las discriminatorias. El capítulo concluirá con una versión del teorema para el caso de clasificación. \\ 
+    
+    
+    
+    La bibliografía empleada ha sido \cite{RealComplexAnalisis,GeneralTopology,TeoremaAproxUni}
+
+
+    
+    
+	\par\bigskip
+}
+\chapter{Teorema de aproximación Universal}\label{ch:TAUniversal}
+
+\newpage 
+\section{Definiciones y Teoremas previos}
+
+    \begin{definicion}[Recubrimiento por abiertos]
+     Un recubrimiento por abiertos de un subconjunto $A \subseteq X$, es una familia de conjuntos abiertos $\{O_i\}_{i \in I}$ tales que su unión cubre a $A$, esto es, 
+     \begin{equation}
+         \bigcup_{i \in I} O_i \supseteq A
+     \end{equation}
+    \end{definicion}
+
+    \begin{definicion}[Compacidad en espacios topológicos]
+     Un espacio topológico $(X,\tau)$ se dice compacto si para todo recubrimiento por abiertos de $X$, existe un subrecubrimiento finito del mismo.
+    \end{definicion}
+    
+    \begin{definicion}[Compacidad local en espacios topológicos]
+     Diremos que un espacio topológico $(X,\tau)$ es localmente compacto si cada $x \in X$ posee un entorno compacto
+    \end{definicion}
+
+    \begin{ejemplo}~\smallskip
+    \begin{enumerate}
+        \item Todo espacio topológico finito es compacto, ya que todo recubrimiento abierto del mismo es finito.
+        \item El conjunto de los números reales dotado de la topología usual no es compacto ya que el recubrimiento $U = \{(-n,n): n \in \N\}$ no admite un subrecubrimiento finito, pero si es localmente compacto.
+        \item $\R^n$ con la topología usual no es compacto, pero si localmente compacto ya que dado $x\in \R^n$ la bola cerrada de centro $x$ y radio $1$ es un entorno compacto de $x$.
+    \end{enumerate}
+    \end{ejemplo}
+
+    \begin{definicion}[Propiedad Hausdorff]
+     Sea $(X,\tau)$ un espacio topológico. Dos puntos $x,y \in X$ cumplen la propiedad Hausdorff si existen dos entornos $U_x$, $U_y$ de $x$ y de $y$ respectivamente tales que $U_x \cap U_y = \emptyset$.  
+    \end{definicion}
+    
+    Si todo par de puntos distintos del espacio $X$ verifican esta propiedad se dice que el espacio topológico $(X,\tau)$ es un espacio Hausdorff.\\  
+    
+    Vamos a adentrarnos a continuación en el fascinante mundo del análisis funcional, ya que necesitamos de algunos teoremas de esta rama de las matemáticas para probar principal teorema de esta sección. En el análisis funcional se conoce como operador a las aplicaciones entre espacios normados, si el espacio de llegada es un cuerpo escalar $\mathbb{K}$, que puede ser $\R$ o $\C$, entonces se llaman funcionales. Introduzcamos algunos conceptos que son necesarios para entender lo que sigue. \\
+    
+    
+    \begin{definicion}[Espacio Dual]
+    Sea $X$ un espacio normado, se define el dual de X, denotado $X^*$ como el espacio vectorial formado por todos los funcionales lineales continuos en $X$
+    \end{definicion}
+    
+    \begin{observacion}
+    La complitud de $\mathbb{K}$ nos asegura que $X^*$ es siembre un espacio de Banach.
+    \end{observacion}
+    
+    \begin{definicion}[Funcional Sublineal]
+    Sea $X$ un espacio vectorial. Un funcional sublineal en $X$ es una aplicación $\varphi$ homogénea por homotecias y verificando la desigualdad triangular, es decir, verifica las siguientes dos condiciones:
+    \begin{equation}
+        \begin{aligned}
+            \varphi(rx) & = r \varphi(x)\\
+            \varphi(x + y) & \leq \varphi(x) + \varphi(y)
+        \end{aligned}
+    \end{equation}
+    \noindent para todo $r > 0$ y para todo $x,y \in X$
+    \end{definicion}
+
+\subsection{Teorema de Hahn-Banach}
+    
+    Este teorema tiene gran relevancia en el análisis funcional, daremos su versión general y comentaremos por encima la demostración. Este resultado está formulado en términos de espacios vectoriales, por lo que veremos una consecuencia suya que nos dará una reformulación en el contexto de espacios normados y de esta última extraeremos un corolario para demostrar el teorema de aproximación universal.\\ 
+    
+    
+    \begin{teorema}[Hahn 1927, Banach 1929]\label{teorema:HB}
+    Sea $X$ un espacio vectorial y $\varphi$ un funcional sublineal en $X$. Sea $M$ un subespacio de $X$ y $g$ un funcional lineal en $M$, que está dominado por $\varphi$, en el siguiente sentido:
+    \begin{equation}
+        Re g(y) \leq \varphi(y) \quad \forall y \in M
+    \end{equation}
+    
+    \noindent Entonces existe un funcional lineal $f$ en $X$, que extiende a $g$ y está dominado por $\varphi$, es decir,
+    
+    \begin{equation}
+        f(y) = g(y) \quad \forall y \in M \qquad y \qquad Re f(x) \leq \varphi(x) \quad \forall x \in X
+    \end{equation}
+    
+    \noindent Además, si $\varphi$ es una seminorma, se tiene de hecho, 
+    \begin{equation}
+        |f(x)| \leq \varphi(x) \quad x \in X
+    \end{equation}
+    \end{teorema}
+    
+    Como curiosidad comentar que la versión demostrada por Hahn suponía que $\varphi$ es una norma en $X$, y la versión que hemos especificado es algo más general y fue aportada por $Banach$ siendo esencial para establecer la versión geométrica del teorema, aunque no entraremos en ella. \\
+    
+    Este teorema nos da las condiciones para las cuales podemos extender un funcional de un subespacio al espacio de partida. Vamos a comentar brevemente un esbozo de la demostración sin entrar en detalle. La prueba se divide en tres partes, la primera consiste en considerar la recta real y en extender el funcional $g$ al subespacio que se obtiene sumando una recta a $M$. Esta etapa de la demostración es constructiva. La segunda parte consiste en iterar la extensión realizada en la primera etapa, añadiendo en cada paso una recta al subespacio obtenido en el paso anterior, hasta llegar a $X$. En este paso hay que tener extremo cuidado, ya que se necesitan tantas iteraciones como indique la dimensión de $X/M$, que puede ser infinita, e incluso no numerable. Por tanto lo que se hace es aplicar una inducción transfinita que se formaliza usando el \textit{Lema de Zorn}. Al aplicar el lema de Zorn el razonamiento deja de ser constructuvo, pues no controlamos el resultado del proceso, se prueba la existencia del funcional $f$ que extiende a $g$, pero no se conoce explícitamente. La última etapa consiste en considerar el caso complejo y probar la última afirmación del teorema referente al caso en que $\varphi$ es seminorma. \\
+    
+    Una consecuencia inmediata de este teorema para el caso de espacios normados es la siguiente,
+    
+    \begin{teorema}[Teorema de extensión de Hahn-Banach]\label{teorema:ExtensionHB}
+    Sea $X$ un espacio normado, $M$ un subespacio de $X$ y $g \in M^*$. Entonces existe $f \in X^*$ tal que $f$ extiende a $g$ y verifica que $||f|| = ||g||$. Se dice que $f$ es una extensión Hahn-Banach de $g$
+    \end{teorema}
+
+    \begin{proof}
+        Definimos $\varphi(x) = ||g|| ||x||$ para todo $x \in X$. Claramente $\varphi$ es una seminorma en $X$ y salgo en el caso trivial $g=0$ es una norma. La continuidad de $g$ nos garantiza que $Re g(y) \leq |g(y)| \leq \varphi(y)$ para todo $y \in M$. Por el teorema \ref{teorema:HB} obtenemos un funcional lineal $f$ en $X$ verificando,
+        \begin{equation}
+            f(y) = g(y) \quad \forall y \in Y \qquad y \qquad |f(x)| \leq \varphi(x) = ||g|| ||x|| \quad \forall x \in X
+        \end{equation}
+        \noindent Vemos que $f \in X^*$ con $||f|| \leq ||g||$ y al extender $f$ a $g$ se tiene que $||f|| \geq ||g||$, luego $||f|| = ||g||$.
+    \end{proof}
+    
+    Obtenemos ahora el corolario que comentamos al principio de esta sección.
+    
+    \begin{corolario}\label{corolario:Hanh-Banach}
+    Sea $X$ un espacio normado, $M$ un subespaciode $X$. Si $x_0 \not\in \overline{M}$, existe un $f \in X^*$ tal que $f(x) = 0$ para todo $ x \in M$, $f(x_0) = 1$ y $||f|| = \frac{1}{d}$ donde $d=dist(x_0,M)$
+    \end{corolario}
+    
+    \begin{proof}
+    Consideramos $M' = L(M \cup \{x_0\})$ el conjunto de los elementos de la forma $y = x + a x_0$ con $ x \in M$ y $a \in \C$. Notamos que el valor de $a$ va a estar determinado por el valor de $y$. Definimos a continuación la aplicación $f:M' \to \C$ dada por $f(x + a x_0) = a$ para todo $x \in M$ y para todo $a \in \C$. Claramente $f$ es lineal y además verifica que $f(x) = 0 \; \forall x \in M$ y $f(x_0) = 1$. \\
+    
+    \noindent Por un lado tenemos que,
+    
+    \begin{equation}
+        \begin{aligned}
+            ||f|| & = sup \Big\{ \frac{|f(y)|}{||y||}: y \in M', y \not= 0 \Big\}\\
+            & = sup \Big\{ \frac{|a|}{|| x + a x_0||}: a \in \C, (x + a x_0) \not= 0 \Big\}
+        \end{aligned}
+    \end{equation}
+    
+    \noindent Por otro lado,
+    \begin{equation}
+        \frac{|a|}{|| x + ax_0 ||} = \frac{1}{||x_0 + \frac{x}{a}||} = \frac{1}{|| X_0 - z ||}
+    \end{equation}
+    
+    \noindent para algún $z \in M$. Por lo que finalmente resulta $||f|| = \frac{1}{d}$. Por último aplicamos el teorema \ref{teorema:ExtensionHB} para obtener un funcional que extiende a $f$ en $X$. \\
+    
+    \end{proof}
+    
+    
+    \subsection{Teorema de Representación de Riesz}
+    
+    El teorema de Representación de Riesz es uno de los teoremas fundamentales del Análisis funcional. Hay varios teoremas bien conocidos en esta rama de las matemáticas que tienen este nombre, en este caso daremos una versión para funcionales lineales en $C_0(X)$ . Omitiremos la demostración, pero se puede encontrar en \cite{RealComplexAnalisis}. \\
+    
+    \begin{definicion}
+    Una función compleja $f$ en un espacio Hausdorff localmente compacto $X$ se dice que se desvanece en el infinito si para cada $\e > 0$ existe un conjunto compacto $K \subset X$ tal que $|f(x)| < \e$ para todo $x \in K$. La clase de todas las funciones continuas $f$ en $X$ que se desvanecen en el infinito se denota como $C_0(X)$
+    \end{definicion}
+    
+    \begin{teorema}\label{teorema:TRRiesz}    
+    Sea $X$ un espacio Hausdorff localmente compacto. Para cada funcional lineal acotado, $L$, en $C_0(X)$, existe una única ${\mu \in M(I_n)}$ medida regular compleja de Borel en el siguiente sentido
+    \begin{equation}
+        L(f) = \int_{X} f(x) d\mu \quad \forall f \in C_0(X)
+    \end{equation}
+    \end{teorema}
+    
+    
+    
+    
+\section{Teorema de Aproximación Universal}
+
+    El principal objetivo de esta sección es ver cuales son las condiciones bajo las cuales una suma de la forma
+    
+    \begin{equation}\label{eq:salidaRNN}
+        G(x) = \sum_{j=1}^N \alpha_j \sigma( w_j^Tx + \theta_j )
+    \end{equation}
+    
+    
+    \noindent es densa en $C(I_n)$ donde $w_j \in \R^m$ y $\alpha,J, \theta \in \R$. $C(I_n)$ es el espacio de las funciones continuas real valuadas en el cubo unitario $n-dimensional$ con la norma del supremo. Notamos que $C(I_n)$ es un espacio Hausdorff localmente compacto. La función $sigma$ es una función sigmoidal, la cual define G.Cybenko en \cite{TeoremaAproxUni} como aquella que verifica
+    \begin{equation} 
+        \sigma(t) \rightarrow \left\{ 
+        \begin{array}{cc}
+             1 & t \to + \infty \\
+             0 & t \to - \infty
+        \end{array}
+        \right.
+    \end{equation}
+    
+    \noindent Notamos que esta definición de función sigmoidal no es exactamente la función sigmoidal que se usa en el ámbito de las redes neuronales, la cual viene dada por
+    \begin{equation}\label{eq:sigmoide}
+        \sigma(t) = \frac{1}{1 + e^-x}
+    \end{equation}
+    \noindent Sin embargo, es un caso particular de la función sigmoidal de G.Cybenko por los que los resultados que veremos son extrapolables a la definición de función sigmoidal que estamos acostumbrados. \\
+    
+    La suma de la ecuación $\eqref{eq:salidaRNN}$ es la salida de una red neuronal con una capa oculta, $N$ neuronas (sin sesgo), $m$ entradas y en donde todas las salidas de las neuronas usan como función de activación la función sigmoidal a excepción de la salida, que aplica solo la identidad. \\
+    
+   
+   \begin{teorema}[Teorema de la Aproximación Universal G.Cybenko \cite{TeoremaAproxUni}]\label{teorema:AproximacionUniversal}
+   Sea $\sigma$ una función continua sigmoidal. Entonces la suma finita dada por 
+   \begin{equation}
+       G(x) = \sum_{j=1}^N \alpha_j \sigma(x_j^T x + \theta_j)
+   \end{equation}
+   \noindent es densa en $C(I_n)$. En otras palabras, dada cualquier función $f \in C(I_n)$ y $\e > 0$, existe una suma G(X) que viene dada por la expresión de arriba de tal manera que 
+   \begin{equation}
+       |G(x) - f(x)| < \epsilon \quad \forall x \in I_n
+   \end{equation}
+   \end{teorema}
+   
+   Para demostrar este teorema necesitamos demostrar su versión más general, que es cuando la función sigmoidal es discrimatoria. Definimos pues este concepto y un lema que nos da las condiciones suficientes para ver cuando una función sigmoidal es discriminatoria . \\
+   
+    \begin{definicion}
+    Decimos que $\sigma$ es discriminatoria si para una medida $\mu \in M(I_n)$\footnote{$M(I_n)$ denota el conjunto de las medidas de Borel regulares finitas. Se dice que una medida es regular si cada conjunto medible puede ser aproximado por el supremo de conjuntos medibles y por ínfimos de conjuntos medibles compactos.}. 
+    
+    \begin{equation}
+        \int_{I_n} \sigma(w^Tx + \theta) d\mu = 0 \quad \forall w\in\R^n, \theta \in \R
+    \end{equation}
+    \noindent implica que $\mu = 0$
+    \end{definicion}
+    
+    \begin{lema}\label{lemma:Caracterizacion discriminatoria}
+    Cualquier función sigmoidal medible y acotada es discriminatoria
+    \end{lema}
+    
+    \begin{proof}[Demostración del teorema \ref{teorema:AproximacionUniversal}]
+    Consideramos $S \subset C(I_n)$ el conjunto de todas las funciones de la forma $G(x)$ dada por 
+    $\ref{eq:salidaRNN}$. Nuestro objetivo es probar que el cierre de $S$ es $C(I_n)$, esto es, $\overline{S} = C(I_n)$. \\
+    
+    Suponemos lo opuesto, esto es, que $\overline{S} \not= C(I_n)$, por lo que existe $g \in C(I_n)/\overline{S}$. Entonces aplicando el corolario $\ref{corolario:Hanh-Banach}$ tenemos la existencia de un funcional acotado ${L \in C(I_n)^*}$ no nulo tal que $S \subset \overline{S} \subset Ker L$, es decir,  ${L(S) = L(\overline{S}) = 0}$. Aplicando el teorema \ref{teorema:TRRiesz} (notando previamente que $I_n$ es un espacio Hausdorff localmente compacto) tenemos que existe $\mu \in M(I_n)$ cumpliendo  
+    \begin{equation}
+        L(h) = \int_{I_n} h(x) d\mu \quad \forall h \in C(I_n)
+    \end{equation}
+    
+    \noindent En particular para cada $w \in \R^n$ y $\theta \in \R$ definimos $h(x) = \sigma(w^T x + \theta) \in \overline{S}$ entonces se debe de cumplir que,
+    
+    \begin{equation}
+        L(h) = \int_{I_n} \sigma(w^T x + \theta) d\mu = 0 \quad \forall w \in R^n, \theta \in \R
+    \end{equation}
+
+    \noindent Como $\sigma$ es una función continua sigmoidal, en particular es medible y además está acotada entonces gracias al lema \ref{lemma:Caracterizacion discriminatoria} tenemos que es discriminante por lo que la ecuación anterior implica que $\mu = 0$, entrando en un absurdo, puesto que tenemos que $L \not= 0$. 
+    \end{proof}
+    
+    \begin{observacion}~\smallskip
+    El teorema anterior es igualmente válido si sustituimos $I_n$ por cualquier otro conjunto compacto $K \subset \R^n$
+    \end{observacion}
+    
+    Este teorema nos dice que usando una función sigmoidal dada por \eqref{eq:sigmoide} en una red neuronal con una capa oculta puede aproximar cualquier función continua en un dominio compacto con tanta precisión como se desee. Además podemos realizar la aproximación con solo una unidad de salida ya que si $f:\R^n \to \R^m$ podemos aproximar cada una de las componentes $f_i:\R^n \to R$ para $i=1,...,n$. \\
+    
+    
+    Originalmente el teorema de aproximación universal está demostrado para funciones de activación sigmoidales, sin embargo, existen versiones de este teorema cambiando la función de activación por otras, como por ejemplo, ReLu, tangente hiperbólica (\cite{UML,lu2017expressive})...
+    
+\subsection{Versión para funciones de clasificación}
+
+    Como consecuencia del teorema de aproximación universal, tenemos una versión para funciones de clasificación. Para ello consideramos la medida de Lebesgue $\lambda$ en $I_n$ y una partición $P_1,...,P_k$ en conjuntos medibles disjuntos de $I_n$.  
+    
+    \begin{definicion}[Función de clasificación]
+    Definimos la función de clasificación para una partición en conjuntos medibles y disjuntos de $I_n$, $f:I_n \to \{1,...,k\}$ como sigue,
+    \begin{equation}
+        f(x) = j \Leftrightarrow x \in P_j
+    \end{equation}
+    \end{definicion}
+    
+    \begin{corolario}
+    Sea $\sigma$ una función continua sigmoidal. Sea $f$ una función de clasificación para cualquier partición en conjuntos medibles y disjuntos de $I_n$. Para cualquier $\e > 0$, existe una suma finita $G(x)$ definida por $\eqref{eq:salidaRNN}$ y un conjunto $D \subset I_n$ con $\lambda(D) \geq 1 - \e$ tal que,
+    \begin{equation}
+        |G(x) - f(x)| < \e \quad \forall x \in D
+    \end{equation}
+    \end{corolario}
+    
+    Al igual que el teorema $\ref{teorema:AproximacionUniversal}$ este corolario sigue siendo igualmente válido si sustituimos $I_n$ por cualquier conjunto compacto de $\R^n$. \\  
+    
+    
+    
+\endinput

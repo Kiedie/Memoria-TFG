@@ -1,0 +1,778 @@
+% !TeX root = ../libro.tex
+% !TeX encoding = utf8
+
+\setchapterpreamble[c][0.75\linewidth]{%
+	\sffamily
+ 
+    
+   En este capítulo vamos a presentar los conceptos y teoremas clave que fundamentan la teoría de lo que sigue. Empezaremos viendo de manera superficial el concepto de diferenciabilidad para continuar con la regla de la cadena y una discusión extendida sobre la confusión que da lugar el actual abuso de notación cometido por ingenieros y físicos. Estos resultados los usaremos para explicar más adelante el algoritmo de BackPropagation. La probabilidad surge de manera natural con con el concepto de medida y junto a este se encuentra el concepto de integral respecto de una medida. Así pues, daremos una pincelada sobre los aspectos necesarios dentro de la teoría de la medida exponiendo los conceptos que nos van a hacer falta como por ejemplo, lo que es un espacio medible, una medida, un espacio de medida y aplicaciones medibles. Posteriormente se darán algunos resultados sobre integración para poder adentrarnos poco a poco en el mundo de la probabilidad y sus resultados más relevantes. Una vez dentro de la parte de probabilidad se verán los aspectos más básicos de esta teoría como las variables aleatorias junto con algunos de sus resultados más importantes. También se estudiarán las distribuciones de probabilidad, función masa de probabilidad y función de densidad junto con algunos aspectos destacables. También se verá el concepto de independencia tanto para eventos como para variables aleatorias y el concepto de distribución de probabilidad condicionada junto con algunos resultados relativamente importantes como lo es la fórmula de la suma y la fórmula de Bayes. Por último se presentarán los momentos de una variable aleatoria haciendo especial incapié en la esperanza, la varianza y la covarianza.\\ 
+   
+   
+   La referencia empleadas para la elaboración de este capítulo han sido \cite{probcourse}, \cite{probreal}, \cite{FJP}y \cite{Rohatgi2000}
+	\par\bigskip
+}
+
+\chapter{Fundamentos Matemáticos}\label{ch:FundamentosMatematicos}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage 
+\section{Fundamentos del Análisis}
+
+\subsection{Diferenciabilidad}
+
+    \begin{definicion}[Derivada direccional de un campo escalar]
+    Sea $f$ un campo escalar definido en un conjunto abierto  $\Omega \subset \R^n$, sea $a \in \Omega$ y $u$ una dirección. Se define la derivada de $f$ en $a$ en la dirección $u$ como el límite
+    
+    \begin{equation}
+        D_{u}f(a) = \underset{t \to 0}{\lim} \frac{f(a + tu) - f(a)}{t}
+    \end{equation}
+    \end{definicion}
+
+    \begin{definicion}[Diferenciabilidad de campos escalares]
+    Sea $f$ un campo escalar definico en un abierto $\Omega \subset \R^n$ y sea $a \in \Omega$. Supongamos que está definido el vector gradiente $\nabla f(a)$. Se dice que $f$ es diferenciable o derivable en $a$ si se verifica que,
+    
+    \begin{equation}
+        \underset{x \to a}{\lim} \frac{f(x) - f(a) - \langle \nabla f(a) | x - a \rangle}{||x - a||} = 0
+    \end{equation}
+    \end{definicion}
+    
+    Cuando la derivada sea en la dirección del vector $e_k$ de la base canónica, se llamará derivada parcial de primer orden de $f$ en $a$ respecto de la variable k-esima. \\
+    
+    \begin{proposicion}
+    Sea $f$ un campo escalar diferenciable en un punto $a$ y sea $u$ una dirección en $\R^n$. entonces se verifica que,
+    \begin{equation}
+        D_{u} f(a) = \langle \nabla f(a) | x \rangle
+    \end{equation}
+    \end{proposicion}
+    
+    \begin{teorema}[Condición suficente de diferenciabilidad para campos escalares]
+    Un campo escalar que tiene derivadas parciales continuas en un conjunto abierto es diferenciable en todo punto de dicho conjunto
+    \end{teorema}
+
+    \begin{definicion}[Diferenciabilidad de campos vectoriales]
+    Sea $F:\Omega \to \R^m$ un campo vectorial donde $\Omega \subset \R^n$ es un abierto y sea $a \in \Omega$. Se dice que $F$ es diferenciable o derivable en $a$ si existe una aplicación lineal $T:\\R^n \to \R^m$ tal que
+    \begin{equation}
+        \underset{x \to a}{\lim} \frac{F(x) - F(a) - T(x - a)}{||x - a||} = 0
+    \end{equation}
+    \noindent Dicha aplicación lineal, si existe es única y se llama diferencial o derivada de $F$ en el punto $a$ y se representa por $DF(a)$
+    \end{definicion}
+    
+    \begin{proposicion}
+    Sea $F = (f_1,...,f_m): \Omega \to \R^m$ donde $\Omega \subset \R^n$ es un abierto, una función vectorial de $n$ variables y $m$ componentes. equivalen las siguientes afirmaciones
+    \begin{enumerate}
+    \item F es diferenciable en a
+    \item Los campos escalares $f_i, i=1,...,m$ componentes de F son diferenciables en $a$    
+    \end{enumerate}
+    \end{proposicion}
+    
+    Supuesto que se verifiquen 1) y 2), la matriz de la aplicación lineal DF(z) en las bases canónicas de $\R^n$ y $\R^m$ es la matriz cuyas filas son los vectores gradiente $\nabla f_i(a)$, esto es la matriz de $m$ filas y $n$ columnas $\Big(D_j f_i(a)\Big)_{1 \leq i \leq m}^{1 \leq j \leq n}$. Esta matriz recibe el nombre de matriz jacobiana de $F$ en $a$ y se representará por $J_F(a)$
+
+\subsection{Regla de la Cadena para el Calculo de Derivadas}
+    
+    La regla de la cadena se usa para calcular las derivadas de una función compuesta por otras funciones. Vamos a enunciar dos teoremas, el primero es la regla de la cadena para funciones que toman valores en la recta real y el segundo es una generalización del primero, dirigido a funciones que toman valores en $\mathbb{R}^n$ con $n$ un número natural arbitrario. 
+        
+            \begin{teorema}[Regla de la cadena - caso unidimensional]
+                Sean $\Omega_1$ y $\Omega_2 \subset \mathbb{R}$ dos abiertos y sean $f:\Omega_2 \rightarrow \mathbb{R}$ y $g:\Omega_1 \rightarrow \mathbb{R}$ dos funciones derivables en los puntos $x_0$ y $g(x_0)$ respectivamente y verificando que $g(\Omega_1) \subset \Omega_2$ (i.e. la composición $f\circ g$ está bien definida). Entonces la composición $h = f\circ g$ es derivable en $x_0$ y se verifica que $$h'(x_0) = (f(g(x_0)))' = f'(g(x_0))g'(x_0)$$
+                
+                Además, si las funciones $f$, y $g$ son de clase $\mathcal{C}^k$ entonces $h$ también lo será.
+            \end{teorema}
+        
+        La notación para la derivada usada en el anterior teorema es conocida como la notación de Lagrange, pero de aquí en adelante nos va a interesar más usar la famosa notación de Leibniz. Por lo que vamos a escribir el resultado anterior con esta nueva notación. Para ello, consideramos $x \in \Omega_2$ que sería nuestro $x_0$ y ahora llamamos $y = g(x)$ y $z = f(g(x))$, entonces se tiene que $$\frac{\partial z}{\partial x} = \frac{\partial z }{\partial y}\frac{\partial y}{\partial x}$$ \\
+        
+            \begin{teorema}[Regla de la cadena - caso n-dimensional]
+             Sean $\Omega_1 \subset \mathbb{R}^q$ y $\Omega_2 \subset \mathbb{R}^n$ dos abiertos y sean $F:\Omega_2 \rightarrow \mathbb{R}^m$ y $G:\Omega_1 \rightarrow \mathbb{R}^n$ dos funciones diferenciables en los puntos $x_0 \in \Omega_1$ y $G(x_0)$ respectivamente y verificando que $G(\Omega_1) \subset \Omega_2$. Entonces se verifica que la función compuesta $H = F\circ G: \Omega_1 \rightarrow \mathbb{R}^m$ es diferenciable en $x_0$ y su diferencial viene dada como la composición de las respectivas diferenciales: 
+             \begin{equation}\label{eq:CR2}
+                DH(a) = DF(G(a)) \circ DG(a)
+             \end{equation}
+              
+             
+             Además, si las funciones $F$, y $G$ son de clase $\mathcal{C}^k$ entonces $H$ también lo será. 
+            \end{teorema}
+            
+        Observamos que $DG(a):\mathbb{R}^q  \rightarrow \mathbb{R}^n$ y $DF(G(a)): \mathbb{R}^n \rightarrow \mathbb{R}^m$, por lo que la composición es una aplicación lineal de $\mathbb{R}^q$ a $\mathbb{R}^m$, como debe ser, pues $H$ es una función vectorial de $q$ variables y $m$ componentes. \\
+        
+        \noindent La expresión de la igualdad \eqref{eq:CR2} usando matrices jacobianas es:
+        
+        \begin{equation}
+            J_H(a) = J_{F}(G(a)) \cdot J_{G}(a)
+        \end{equation}
+        
+        \noindent Tanto $F$, como $G$ y $H$ son campos vectoriales, por tanto, para ${y = (y_1,...,y_q) \in \mathbb{R}^q}$, ${x = (x_1,...,x_n) \in \mathbb{R}^n}$ se tiene que:
+        
+        \begin{equation}
+            \begin{aligned}
+            & (x_1,...,x_n) \mapsto F(x_1,...,x_n) = (f_1(x_1,...,x_n),...,f_m(x_1,...,x_n)) \\
+            & (y_1,...,y_q) \mapsto G(y_1,...,y_q) = (g_1(y_1,...,y_q),...,g_n(y_1,...,y_q)) \\
+            \end{aligned}
+        \end{equation}
+        
+        \noindent siendo $f_j$ y $g_i$ con $1 \leq i \leq q$ y $1 \leq j \leq n$ los respectivos campos escalares, entonces
+                
+        \begin{equation}
+            \begin{aligned}
+            & (y_1,...,y_q) \mapsto H(y_1,...,y_q)  = F\Big(g_1(y_1,...,y_q),...,g_n(y_1,...,y_q))\Big) \\
+            & = \Bigg(f_1\Big(g_1(y_1,...,y_q),...,g_n(y_1,...,y_q)\Big),..., f_m\Big(g_1(y_1,...,y_1),...,g_n(y_1,...,y_q)\Big)\Bigg)
+            \end{aligned}
+        \end{equation}
+        
+        \noindent Poniendo ahora $H=(h_1,...,h_m)$ y escribiendo $b = G(a)$ tenemos que:
+        
+        \begin{equation}\label{eq:ReglaCadena}
+            \frac{\partial h_i}{\partial y_j}(a) = \sum_{k=1}^{n} \frac{\partial f_i}{\partial x_k}(b)\frac{\partial g_k}{\partial y_j}(a) \qquad b = G(a) \qquad (1 \leq i \leq m, 1 \leq j \leq q )
+        \end{equation}
+         
+         Esta igualdad constituye la regla de la cadena para derivadas parciales. Lo más habitual es que $F$ sea un campo escalar. Supongamos, pues, que en lo anterior, $F=f$ es un campo escalar, en cuyo caso $h=f \circ G$ también es un campo escalar. La igualdad \eqref{eq:ReglaCadena} queda ahora:
+         
+         \begin{equation}\label{ed:RC campo escalar}
+             \frac{\partial h}{\partial y_j}(a) = \sum_{k=1}^{n} \frac{\partial f}{\partial x_k}(b)\frac{\partial g_k}{\partial y_j}(a) \qquad b = G(a) \qquad (1 \leq j \leq q )
+         \end{equation}
+         
+        \noindent Podemos interpretar esta igualdad como que la función $G:\Omega_1 \rightarrow \Omega_2 \subset \mathbb{R}^n$  hace un \textit{cambio de variables}, es decir, que las \textit{variables antiguas}  de la función $f$, esto es $x=(x_1,...,x_n) \in \Omega_2$, se han sustituido por \textit{variables nuevas} $y=(y_1,...,y_q) \in \Omega_1$ y la función $f$ se ha \textit{expresado en estas nuevas variables} dando lugar a la función $h$. La relación entre unas variables y otras viene dada por $x_k = g_k(y_1,...,y_q)$ con $1 \leq k \leq n$. \\  
+         
+         Según comenta Javier Pérez en su libro \textit{Cálculo diferencial de funciones de varias variables} \cite{FJP}, ocurre que en muchos textos y libros comenten un abuso de notación para facilitar los cálculos pero que puede llegar a confusión, vamos a detallarlo un poco ya que más adelante nosotros también cometeremos ese abuso. Primeramente, se suele identificar a las funciones $g_k$ que introducen las nuevas coordenadas con las coordenadas antiguas $x_k$, es decir, vemos la coordenadas antiguas como funciones de las nuevas y esto lo escribimos de la siguiente forma.
+         
+         \begin{equation}
+             x_k = x_k(y_1,...,y_q) \qquad 1 \leq k \leq n
+         \end{equation}
+         
+         \noindent Con esta notación la igualdad \eqref{ed:RC campo escalar} queda como sigue:
+         
+         \begin{equation}
+             \frac{\partial h}{\partial y_j}(a) = \sum_{k=1}^{n} \frac{\partial f}{\partial x_k}(b)\frac{\partial x_k}{\partial y_j}(a) \qquad b = G(a) \qquad (1 \leq j \leq q )
+         \end{equation}
+         
+         \noindent La letra $x_k$ juega un doble papel, cuando se deriva con respecto a ella representa una variable y cuando ella se deriva respecto de una variable nueva representa una función. \\
+         
+         Otro abuso de notación muy común que se comete y que resulta bastante peligroso es identificar la función $f$ y $h$ como si fueran la misma con la excusa de que son la misma función expresada en distintas variables. Identificando además la función con una letra, $z$ tenemos que 
+         
+         \begin{equation}
+             \frac{\partial z}{\partial y_j}(a) = \sum_{k=1}^{n} \frac{\partial z}{\partial x_k}(b)\frac{\partial x_k}{\partial y_j}(a) \qquad b = G(a) \qquad (1 \leq j \leq q )
+         \end{equation}
+         
+         \noindent Aquí, la variable $z$ juega un doble papel, a la izquierda representa una función compuesta $h$ y a la derecha es la función dada en sus variables iniciales $f$. \\
+         
+         Es muy importante entender la relación entre los puntos $a$ y $b$ ya que hay que saber los puntos en los que se evalúan las derivadas. En casi todos los libros de ingenierías y física, esta última parte se omite, por lo que nosotros también lo haremos, por lo que finalmente nos queda:
+         
+         \begin{equation}
+             \frac{\partial z}{\partial y_j} = \sum_{k=1}^{n} \frac{\partial z}{\partial x_k}\frac{\partial x_k}{\partial y_j}  \qquad (1 \leq j \leq q )
+         \end{equation}
+         
+         \noindent que expresado de manera vectorial
+         
+         \begin{equation}
+            \nabla_{y}z = \left(\frac{\partial x}{\partial y}\right)^T \nabla_{x}z
+         \end{equation} 
+         
+         
+         La notación como más adelante veremos, simplificará mucho los cálculos. Sin embargo, puede llevar a grandes confusiones si no se tiene claro en todo momento qué representa cada variable y los puntos en los que se evalúa la derivada. \\
+
+\subsection{Conceptos básicos sobre Teoría de la Medida}
+    
+    
+    Empezaremos primeramente introduciendo el pilar en el que se sustenta la teoría de la probabilidad, que es su estructura algebraica, así pues presentaremos el concepto de $\sigma$-algebra, que formará junto con el conjunto al cual esté asociado, un espacio medible. Cuando a estos dos ingredientes le asociamos una medida, ya tendremos la mezcla perfecta para introducir lo que se conoce como un espacio de medida, y en particular, un espacio de probabilidad. También introduciremos otros conceptos y resultados sobre aplicaciones medibles que serán el punto de partida de la siguiente sección.
+    
+       
+
+    \begin{definicion}[$\sigma-algebra$]\label{def:sigma}
+        Sea $\Omega$ un conjunto no vacío. Una $\sigma$ álgebra en $\Omega$ es una familia $\mathcal{A} \subset \mathcal{P}(\Omega)$ (partes de $\Omega$) que verifica:
+            
+        \begin{enumerate}
+                \item $\Omega \in \mathcal{A}$ 
+                \item Cerrado para complementario: $A \in \mathcal{A} \Rightarrow \Omega\backslash A \in \mathcal{A}$ 
+                \item Cerrado para unión numerable: $A_n \in \mathcal{A} \quad \forall n \in \mathbb{N} \Rightarrow \cup^{\infty}_{n=1} \in \mathcal{A}$
+        \end{enumerate}
+    \end{definicion}
+        
+    Notamos que la primera condición es equivalente a que $\emptyset \in \mathcal{A}$ ya que $\Omega \setminus \Omega = \emptyset$. A los elementos de $\mathcal{A}$ se le llaman \textit{conjuntos medibles} y la tupla $(\Omega,\mathcal{A})$ \textit{espacio medible}.
+    
+     \begin{ejemplo}~\smallskip
+       \begin{enumerate}
+           \item $\mathcal{A} = \{\Omega, \emptyset\}$ es la $\sigma$-algebra trivial.
+           
+           \item La familia de las partes de $\Omega$ es la $\sigma$-algebra más grande que existe sobre $\Omega$.
+           
+           \item La intersección de $\sigma$-algebras es otra $\sigma$-algebra.
+           
+           \item La familia formada con todos los intervalos acotados de $\mathbb{R}^n$ es una $\sigma$-algebra y se le conoce como $\sigma$-algebra de Lebesgue, sobre ella se establece la medida de Lebesgue, $\lambda^n$. 
+           
+           \item Cualquier espacio topológico con la $\sigma$-algebra generada por la familia de abiertos de la topología es un espacio medible. En particular, la $\sigma$-algebra generada por la familia de abiertos de $\mathbb{R}^n$, que corresponde con los intervalos acotados, se la conoce como $\sigma$-algebra de Borel en $\mathbb{R}^n$. La cual se denota por $\mathcal{B}(\mathbb{R})^n$
+       \end{enumerate}
+    \end{ejemplo}
+    
+    Nosotros estamos especialmente interesados en los $\sigma$-algebras generados por una topología. Aquella que juega el rol más importante es la topología euclídea de $\mathbb{R}^n$. 
+    
+    \begin{teorema}[$\sigma$-algebra generada por un conjunto de subconjuntos]
+    Sea $\Omega$ un conjunto no vacío arbitrario y $G \subset \mathcal{P}(\Omega)$ una familia de subconjuntos de $\Omega$. Entonces existe un $\sigma$-álgebra, $\sigma(\mathcal{G})$, que contiene a $\mathcal{G}$ y es mínima entre todas las $\sigma$-álgebras que contienen a G. Su expresión viene dada por
+    $$\sigma(\mathcal{G}) := \bigcap_{\substack{ \mathcal{G} \subset \mathcal{A} \\ \mathcal{A} \subset \mathcal{P}(\Omega) \; es \; \sigma-algebra }} \mathcal{A} $$
+    
+    \end{teorema}
+    
+    \begin{definicion}[Topología]
+        Sea $\Omega$ un conjunto arbitrario no vacío. Una clase de conjuntos $\tau \subset \mathcal{P}(\Omega)$ es una topología en $\Omega$ cuando cumple las siguientes propiedades:
+        \begin{enumerate}
+            \item $\emptyset , \Omega \in \tau$.
+            \item Cerrado para intersecciones finitas: $A \cap B \in \tau$ para todo $A,B \in \tau$ 
+            \item Cerrado para uniones arbitrarias: $(\cup_{A \in \mathcal{F}}A) \in \tau$ para todo $\mathcal{F} \subset \tau$.
+        \end{enumerate}
+    \end{definicion}
+    
+    Al par $(\Omega,\tau$) se le llama espacio topológico y a los conjuntos de $\tau$ se conocen como abiertos, los complementarios de los abiertos se llaman cerrados. A diferencia de una $\sigma$-álgebra, las topologías son cerradas para intersecciones finitas, pero también son cerradas para uniones arbitrarias. Vamos a dar un ejemplo de la $\sigma$-algebra de Borel que es la mínima $\sigma$-algebra que contiene una topología dada.
+    
+        \begin{ejemplo}~\smallskip
+           Sea $(\Omega, \tau)$ un espacio topológico. La $\sigma$-álgebra $$\mathcal{B}(\Omega) := \mathcal{B}(\Omega,\tau):=\sigma(\tau)$$ que es generada por los conjuntos abiertos se llama $\sigma$-algebra de Borel en $\Omega$. Los elementos de $\mathcal{B}(\Omega,\tau)$ son llamados conjuntos de Borel o conjuntos Borel medibles. Frecuentemente la topología que se usa es la usual de $\mathbb{R}^n$
+        \end{ejemplo}   
+    
+    
+    
+    \begin{definicion}[Medida]\label{def:medida}
+          Sea $(\Omega,\mathcal{A})$ un espacio medible. Una medida en $(\Omega,\mathcal{A})$ es una aplicación $\mu: \mathcal{A} \rightarrow \mathbb{R}_0^+$ tal que
+                  
+          \begin{enumerate}
+             \item $\mu(\emptyset) = 0$
+             \item Si $\{A_m\}_{n\in\mathbb{N}} \subset \mathcal{A}$ es una colección numerable de subconjuntos tales que ${A_i \cap A_j = \emptyset}$ para $i\not=j$, entonces $\mu(\cup^{\infty}_{n=1}A_n) = \sum^{\infty}_{n=1} \mu(A_n)$
+          \end{enumerate}
+     \end{definicion}
+     
+     
+     Gracias a las definiciones \ref{def:sigma} y \ref{def:medida} podemos presentar lo que se conoce como espacio de medida, que no es más que un espacio medible con una medida asociada al $\sigma$-algebra, $(\Omega,\mathcal{A},\mu)$. Ahora bien, el objetivo es introducir lo que viene a ser un espacio de probabilidad, que es un caso particular de espacio de medida en el que la imagen de $\mu$ está restringida al intervalo $[0,1]$ y $\mu(\Omega)=1$. Pero antes de ello, veamos algunos ejemplos.
+     
+     
+    \begin{ejemplo}~\smallskip
+       \begin{enumerate}
+           \item Sea $\omega \in \Omega$ y $\delta_{\omega}(A) = \mathbb{I}_A(\omega)$, donde $\mathbb{I}_A(\omega)$ es la función indicadora para un $\omega$,  entonces $\delta_{\omega}$ es una medida de probabilidad para cualquier $\sigma$- álgebra, se la conoce como \textit{medida de Dirac} 
+           
+           \item Existe una medida unívocamente determinada, $\lambda^n$ en $(\mathbb{R}^n,\mathcal{B}(\mathbb{R}^n))$ con la siguiente propiedad,
+           $$\lambda^n((a,b]) = \prod_{i=1}^n(b_i-a_i)$$
+           para todo $a,b \in \mathbb{R}^n$ con $a<b$. Esta medida se la conoce como la medida de Lebesgue  en $(\mathbb{R}^n,\mathcal{B}(\mathbb{R}^n))$ o también como la medida de Lebesgue-Borel.
+           
+           \item La restrición de la medida de Lebesgue-Borel de $(\mathbb{R},\mathcal{B}(\mathbb{R}))$ a $[0,1]$ es una pedida de probabilidad en $([0,1],\mathcal{B}(\mathbb{R})|_{[0,1]})$
+       \end{enumerate}
+       \end{ejemplo}
+     
+     
+    \begin{definicion}[Espacio de probabilidad]
+        Un espacio de probabilidad es una terna $(\Omega,\mathcal{A},P)$ donde $\Omega$ es un conjunto llamado espacio muestral que contiene a todos los posibles resultados del experimento. $\mathcal{A}$ es una $\sigma$-álgebra asociada a $\Omega$ y ${P:\mathcal{A}\rightarrow [0,1]}$ es una función de probabilidad que asigna una probabilidad a todo suceso verificando los tres axiomas de Kolmogorov
+        
+        \begin{itemize}
+            \item $P(\Omega)=1$
+            \item $P(A) \geq 0 \quad \forall A \in \mathcal{A}$
+            \item Si $\{A_m\}_{n\in\mathbb{N}} \subset \mathcal{A}$ es una colección numerable de subconjuntos tales que ${A_i \cap A_j = \emptyset}$ para $i\not=j$, entonces $P(\cup^{\infty}_{n=1}A_n) = \sum^{\infty}_{n=1} P(A_n)$
+        \end{itemize}
+      \end{definicion}
+      
+      Vamos a introducir a continuación la definición de aplicación medible. Es de vital importancia no confundir el concepto de medida con el de aplicación medible, ya que no tienen nada que ver.
+      
+      \begin{definicion}[Aplicación medible]
+      Sean $(\Omega_1,\mathcal{A}_1)$ y $(\Omega_2,\mathcal{A}_2)$ dos espacios medibles. Una aplicación $X:\Omega_1 \rightarrow \Omega_2$ se dice que es medible cuando la imagen inversa por $X$ de todo elemento de $\mathcal{A}_2$ es un elemento en $\mathcal{A}_1$, esto es, $X^{-1}(A) \in \mathcal{A}_1$ para todo $A \in \mathcal{A}_2$. Cuando $X$ sea medible, escribiremos $X:(\Omega_1,\mathcal{A}_1) \rightarrow (\Omega_2,\mathcal{A}_2)$
+      \end{definicion}
+      
+      Hemos definido el concepto de aplicación medible sobre un espacio medible de forma general. En lo que nos atañe podemos usar otra definición de manera más particular, para ello fijamos un conjunto medible $\Omega \subset \mathbb{R}^n$, consideramos un espacio topológico $Y$ y entonces diremos que $f:\Omega \to Y$ es una función medible cuando la imagen inversa por $f$ de todo subconjunto abierto de $Y$, sea un conjunto medible, es decir,
+      $$O = O^{\circ} \subset Y \implies f^{-1}(G) \in \mathcal{M}$$ donde $\mathcal{M}$ es la familia de todos los subconjuntos medibles de $\mathbb{R}^n$ \\ 
+      
+      A modo de ejemplo, podemos ver muy fácilmente que toda función continua $g:\Omega \to Y$ es medible, ya que dado un abierto $O \subset Y$, se tiene que $h^{-1}(O)$ es abierto en $\Omega$, es decir, $h^{-1}(G) = A \cap \Omega$ donde $A$ es un abierto de $\mathbb{R}^n$, luego $h^{-1}(G)$ es medible, por serlo $A$ y $\Omega$
+       
+      \begin{observacion}
+      El concepto de medibilidad es una propiedad muy débil. De hecho, si no aplicamos el axioma de elección, es imposible probar la existencia de conjuntos que no sean medibles, por lo que para cualquier espacio topológico $Y$, tampoco se puede probar la existencia de una función de $\Omega$ en $Y$ que no sea medible. En la práctica, cualquier función que tenga una definición explícita, que no involucre de alguna forma el axioma de elección, va a ser medible.
+      \end{observacion}
+      
+   
+       
+    \begin{ejemplo}~\smallskip
+       \begin{enumerate}
+       
+            \item La identidad es una aplicación medible 
+            \item La composición de aplicaciones medibles es medible
+            \item La función indicadora de un subconjunto $A \subset \Omega$ se define como 
+           $$ \mathbb{I}_{A}(\omega):= \left\{ \begin{array}{lcc} 1 & si & \omega\in A\\
+           \\ 0 & si & \omega \notin A \end{array} \right. $$
+           y es una aplicación medible en el espacio $(\Omega, \mathcal{A})$ si y sólo si $A \in \mathcal{A}$
+           
+           \item Cualquier aplicación $X:(\Omega,\mathcal{P}(\Omega))\to(\Omega',\{\emptyset, \Omega'\})$, donde $\mathcal{P}(\Omega)$ representa las partes de $\Omega$, es medible
+       \end{enumerate}
+     \end{ejemplo} 
+       
+      
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     
+\subsection{Resultados sobre integración}
+
+    Basándonos en las nociones de espacios de medida y aplicaciones medibles, introducimos la integral de una aplicación medible con respecto a una medida general. Esto generaliza la integral de Lebesgue. Además, se introducirán algunos resultados clave que serán usados en la siguiente sección. \\ 
+
+    Vamos a partir de un espacio de medida $(\Omega, \mathcal{A}, \mu)$ y una función real medible ${f:\Omega \to \mathbb{R} \cup \{-\infty,\infty\}}$, con estos elementos se puede definir el concepto de integral de una función medible real respecto de la medida $\mu$ y cuya expresión viene dada por
+    $$\int f(\omega)\mu(d\omega) := \int_{\Omega} f \; d\mu$$ \\
+    
+    Esta integral se construye primeramente para las llamadas funciones simples positivas, dicha construcción se extiende a funciones medibles positivas como el límite de dichas funciones y posteriormente a las funciones medibles. Diremos que $f$ es $\mu$-integrable cuando la integral de $f$ respecto de una medida $\mu$ exista, es decir, cuando $\int_{\Omega}|f| d\mu < \infty$. Veamos algunas de sus propiedades y resultados más relevantes, pero previamente definimos el espacio de las funciones medibles $\mu$-integrables como 
+    
+    $$\mathcal{L}^1(\mu):= \mathcal{L}^1(\Omega, \mathcal{A}, \mu) := \Bigl\{ f:\Omega \to \mathbb{R}\cup\{-\infty,\infty\}: f \; es \; medible \; y \; \int_{\Omega} |f| d\mu < \infty \Bigl\}$$
+    
+    \begin{proposicion}[Propiedades]
+    Sea $f,g \in \mathcal{L}^1(\mu)$
+    \begin{enumerate}
+        \item (Monotonía) Si $f\leq g$ casi por doquier, entonces $\int f d\mu \leq \int g d\mu$. En particular, si $f=g$ c.p.d.\footnote{c.p.d. son las siglas de casi por doquier. Una propiedad se cumple casi por cuando se cumple siempre exceptuando un conjunto de medida nula} entonces $\int f d\mu = \int g d\mu$
+        \item (Desigualdad Triangular) $ |\int f d\mu| \leq \int |f| d\mu$
+        \item (Linealidad) Si $\alpha, \beta \in \mathbb{R}$, entonces $\alpha f + \beta g \in \mathcal{L}^1(\mu)$ y 
+        $$ \int (\alpha f + \beta g) \; d\mu = \alpha \int f \; d\mu + \beta \int g \; d\mu $$
+    \end{enumerate}
+    \end{proposicion}
+    
+    \begin{proposicion}
+    Sea $f:\Omega \to [0,\infty]$ una aplicación medible, entonces:
+    \begin{enumerate}
+        \item $f=0$ c.p.d. si y solo si $\int f d\mu = 0$
+        \item Si $\int_{\Omega} f d\mu < \infty$ entonces $f < \infty$ c.p.d.
+    \end{enumerate}
+    \end{proposicion}
+    
+    Los siguientes teoremas y proposiciones nos van a ser útiles a la hora de calcular más adelante la esperanza y los momentos de orden superior de una variable aleatoria.
+    
+    \begin{proposicion} \label{prop:int1}
+    Sean $(\Omega, \mathcal{A})$ y $(\Omega', \mathcal{A}')$ dos espacios medibles. Sea $\mu$ una medida en $\Omega$ y sea $X:\Omega \to \Omega'$ una aplicación medible. Definimos $\mu_X = \mu \circ X^{-1}$, que es una medida en $(\Omega',\mathcal{A}')$. Sea $f:\Omega' \to \Bar{\mathbb{R}}$ $\mu_X$-integrable en $\Omega'$. Entonces $f \circ X \in \mathcal{L}^1(\mu)$ y $$\int_{\Omega} (f \circ X) \; d\mu = \int_{\Omega'} f \; d(\mu \circ X^{-1})$$
+    \end{proposicion}
+    
+    \begin{definicion}
+        Sea $(\Omega, \mathcal{A}, \mu)$ un espacio de medida y $f:\Omega \to [0,\infty)$ una función medible. Definimos $v:\mathcal{A} \to \mathbb{R}$ como $$v(A) := \int_A f \; d\mu := \int_\Omega (f\mathbb{I}_A) \; d\mu, \quad \forall A \in \mathcal{A} $$
+    \end{definicion}    
+    
+    Se tiene que $v$ es una medida en $\Omega$. Escribiremos $f\mu = v$ y diremos que $v$ tiene una función de densidad $f$ respecto de $\mu$. En el caso de que $\mu$ sea la medida de Lebesgue se dirá directamente que $v$ tiene función de densidad $f$. Un detalle muy importante es que bajo las condiciones de la definición anterior, tenemos que la función de densidad $f$ respecto de $\mu$ es única. \\ 
+    
+    
+    \begin{proposicion} \label{prop:int2}
+     Sea $(\Omega, \mathcal{A}, \mu)$ un espacio de medida. Sea $f:\Omega \to [0,\infty]$ y $g:\Omega \to \bar{\mathbb{R}}$ funciones medibles. Entonces $g$ es $f\mu$-integrable en $\Omega$ si y solo si $gf$ es $\mu$-integrable en $\Omega$, en cuyo caso
+     $$\int_{\Omega} g \; d(f\mu) = \int_{\Omega} gf \; d\mu$$
+    \end{proposicion}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Fundamentos de Probabilidad}       
+
+    Una vez expuestas las nociones básicas de medida juntos con los resultados de integración nos adentramos en la teoría de la probabilidad. La idea fundamental de la teoría de la probabilidad moderna es modelar uno o varios experimentos aleatorios como un espacio de probabilidad $(\Omega,\mathcal{A},P)$. Los conjuntos $A \in \mathcal{A}$ se denominan sucesos. En la mayoría de los casos, los eventos de $\Omega$ no se observan directamente. Más bien, las observaciones son aspectos de los experimentos individuales que se codifican como aplicaciones medibles de $\Omega$ a un espacio de posibles observaciones. En resumen, cada observación aleatoria en una aplicación medible y las probabilidades de las posibles observaciones aleatorias se describirán en términos de la distribución de la variable aleatoria correspondiente.\\
+    
+
+\subsection{Variables Aleatorias}
+
+    En este capítulo expondremos el concepto de variable aleatoria, tanto para casos continuos y discretos junto con el concepto de función de distribución. Aunque nos centraremos en las variables aleatorias con valores reales que son las que nos interesan de cara a la teoría del aprendizaje. También detallaremos teoremas y conceptos clave relacionados entre sí para forjar las bases de cara a los siguientes capítulos.\\
+    
+    
+        \begin{definicion}[Variable Aleatoria]\label{def:VA}
+            Sea $(\Omega, \mathcal{A},P)$ un espacio de probabilidad y $(\Omega',\mathcal{A}')$ un espacio medible. Decimos que $X:\Omega \to \Omega'$ es una variable aleatoria con valores en $\Omega'$ si $X$ es una aplicación medible, esto es,
+            \begin{equation}\label{eq:defVA}
+            X^{-1}(B) = \{\omega \in \Omega: X(\omega) \in B\} \in  \mathcal{A} \quad \forall B \in \mathcal{A}'
+            \end{equation}
+        \end{definicion}        
+        
+    
+    En particular, si ($\Omega',\mathcal{A}') = (\mathbb{R},\mathcal{B}(\mathbb{R}))$ decimos que $X$ es una variable aleatoria real. Para verificar que una aplicación es una variable aleatoria real no es necesario comprobar que se cumple la definición para todo conjunto boleriano. Bastaría comprobarlo para un generador de $\mathcal{B}(\mathbb{R})$, nosotros vamos a usar la clase de intervalos cerrados por la derecha de la forma $(-\infty,x]$ con $x \in \mathbb{R}$. \\
+    
+    Otro caso particular que también tiene especial relevancia es cuando $\Omega' = \mathbb{R}^n$ y $\mathcal{A}' = \mathcal{B}(\mathbb{R}^n)$, en cuyo caso tendremos que $X$ es un vector aleatorio real o una variable aleatoria N-dimensional. Démosle una definición
+    
+        \begin{definicion}[Vector Aleatorio Real]\footnote{Pueden darse definiciones parecidas del concepto de vector aleatorio, en términos de intervalos de cualquier otro tipo}
+            Dado un espacio de probabilidad $(\Omega, \mathcal{A}, P)$, se llama vector aleatorio (n-dimensional) a toda aplicación
+     
+                
+                \begin{align}
+                    \mathbf{X} = (X_1,...,X_2): \; & \Omega \to \mathbb{R}^n &\\
+                    & \omega \mapsto \mathbf{X}(\omega) = (X_1(\omega),...,X_n(\Omega))
+                \end{align}
+                
+            que cumpla,
+            $$\mathbf{X}^{-1}((-\infty,\mathbf{x}]) \in \mathcal{A} \quad \forall \mathbf{x} \in \mathbf{R}^n$$
+        \end{definicion}
+        
+    Ni que decir tiene que dado un vector aleatorio $\mathbf{X}$ la aplicación $X_i = \Pi_i \circ \mathbf{X}$ obtenida de proyectar el vector aleatorio en su componente i-ésima es una aplicación medible, por lo que cada componente del vector aleatorio es una variable aleatoria. Incluso se podría establecer una caracterización y decir que $\mathbf{X}$ es un vector aleatoria si y solo si todas sus componentes son vectores aleatorios. \\
+    
+    Bajo el pretexto de la definición \ref{def:VA}, si $X(\Omega)$ es un conjunto numerable, diremos que $X$ es una variable aleatoria discreta. En otro caso, será una variable aleatoria continua. A partir de ahora vamos a considerar como espacio de probabilidad $(\Omega, \mathcal{A},P)$. \\
+    
+        \begin{teorema}[Caracterización Variable Aleatoria Real]
+        $X$ es una V.A.\footnote{V.A. denota Variable Aleatoria} real si y solo si para cada $x \in \mathbb{R}$ 
+            \begin{align}
+                \{\omega: X(\omega)\leq x\} = \{X \leq x\} \in \mathcal{A}
+            \end{align}
+        
+        \end{teorema}
+    
+        \begin{observacion}
+        \begin{enumerate}
+            \item Si $X$ es una V.A. real los conjuntos $\{X = x\}$, $\{a < X \leq b$\},${\{X < x\}}$,$\{a \leq X < b\}$, $\{a < X < b\}$ y $\{a \leq X \leq b\}$ son todos eventos. Además podemos usar cualquiera de estos intervalos para definir una variable aleatoria.
+        \end{enumerate}
+        \end{observacion}
+    
+        \begin{proposicion}
+        Sea $X$ una variable aleatoria real definida en un espacio de probabilidad y sea $g$ una función medible. Entonces $Y=g(X)$ es una variable aleatoria
+        \end{proposicion}
+        
+        La demostración de esta proposición es bastante sencilla y se apoya en el hecho de que la composición de funciones medibles es medible. Con esta proposición podemos transformar una V.A. en otra sin más que componerla con cualquier función medible. 
+    
+        \begin{ejemplo}
+        Sea $\Omega = \{ HH,TT,HT,TH \}$ y $\mathcal{A}$ las partes de $\Omega$. Definimos $X$ por
+        $$X(\omega) = "Numero \; de \; H's \; en \; \omega"$$
+        Por lo que $X(HH) = 2$,$X(HT)=1$,$X(TH)=1$,$X(TT)=0$
+        
+        $$ X^{-1}(-\infty,x] = \left\{ 
+        \begin{array}{lcc} 
+                \emptyset &   x<0, \\
+                \\ \{TT\}  & 0 \leq  x < 1, \\
+                \\ \{TT,HT,TH\} & 1 \leq x < 2, \\
+                \\ \Omega & 2 \leq x
+        \end{array} \right. $$
+        Por lo que X es una V.A. real. 
+        \end{ejemplo}
+    
+    Notamos que no hemos usado la noción de probabilidad en la definición de V.A. Esta noción entra en juego para definir la llamada distribución de probabilidad. De manera intuitiva, como $P$ es una medida de probabilidad sobre $(\Omega, \mathcal{A})$, sabemos calcular probabilidades en $\Omega$ vía $P$. Al tener una aplicación medible $X:\Omega \to \Omega'$ vamos a tener una forma de medir en $\Omega'$. Entonces la medida de probabilidad $P$ sobre $(\Omega, \mathcal{A})$ induce una nueva medida de probabilidad sobre $\Omega'$ que da lugar a la siguiente definición. \\
+    
+   
+    
+    \begin{definicion}[Distribución de Probabilidad]
+            Sea $(\Omega, \mathcal{A}, P)$ un espacio de probabilidad y $(\Omega',\mathcal{A}')$ un espacio medible. Sea $X:\Omega \to \Omega'$ una V.A.
+        \begin{enumerate}
+        
+            \item Definimos la distribución de X como $P_X = P \circ X^{-1}$, que es una medida de probabilidad. Renombrando $\mu = P_X$ escribiremos $X \sim \mu$ y diremos que $X$ sigue o tiene una distribución $\mu$.
+                
+            \item Para variables aleatorias reales $X$, la función $F_X: \mathbf{X}(\Omega) \subset \mathbb{R} \to [0,1]$ dada por ${ F_X(x) = P_X((-\infty,x]) = P(X^{-1}\{(-\infty,x]\}) = P[\omega \in \Omega: X(\omega) \leq x] = P[X \leq x]}$ se llama función de distribución de X.
+                
+            \item En el caso $(\Omega', \mathcal{A}')=(\mathbb{R}^n,\mathcal{B}(\mathbb{R}^n)$ se define la función $F_X: \mathbf{X}(\Omega) \subset \mathbb{R}^n \to [0,1]$ como, 
+                
+                $$F_X(x) = P[\mathbf{X} \leq \mathbf{x}] = P_X(]-\infty,\mathbf{x}]^n)$$ y se le llama función de distribución de $P_X$.
+                
+            Las distribuciones de cada una de las variables aleatorias que componen el vector reciben el nombre de distribuciones marginales y la función de distribución marginal viene dada por
+            
+            $$F_{X_i} = \lim_{\substack{x_j \to \infty \\ i \neq j }} F_X(x_1,...,x_i,...,x_n)$$
+                
+            \item Una familia $(X_i)_{i \in I}$ de variables aleatorias se dice que son idénticamente distribuidas cuando $P_{X_i} = P_{X_j}$ para todo $i,j \in I$ y se denota como $X_i \overset{\mathcal{D}}{=} X_j$
+        \end{enumerate}
+        
+    \end{definicion}
+    
+    \begin{proposicion}[Caracterización de una función de distribución]~\smallskip
+    Una función de distribución acumulada $F(x)$ asociada a la variable aleatoria real $X$  satisface:
+    \begin{enumerate}
+        \item $F$ es monótona no decreciente, i.e., si $x_1 < x_2$ entonces $F(x_1) < F(x_2)$
+        \item $F$ es continua por la derecha, i.e., $\lim_{x \to a^+}F(x) = F(a^+)$
+        \item $0 \leq F(x) \leq 1 \quad \forall x \in X(\Omega)$
+        \item $\lim_{x \to + \infty}F(x) = 1$
+        \item $\lim_{x \to -\infty}F(x) = 0$
+    \end{enumerate}
+    
+    \end{proposicion}
+    
+    \begin{teorema}
+    Para cada función de distribución $F$, existe una variable aleatoria real $X$ tal que $F_X = F$
+    \end{teorema}
+    
+    \begin{definicion}[Función masa de probabilidad]
+        Sea $(\Omega, \mathcal{A}, P)$ un espacio de probabilidad y sea $X:\Omega \to \mathbb{R}$ una variable aleatoria discreta. Se define la \textit{función masa de probabilidad de X}, $p_X:X(\Omega) \to [0,1]$ como sigue
+        $$p_X(x) = P_X(x) = P([X=x]) \quad \forall x \in X(\Omega)$$
+        
+        Si $\mathbf{X}$ fuera un vector aleatorio que toma valores en $\mathbb{R}^n$ entonces,
+        $$p_X(x) = P[\mathbf{X} = x] = P[X_1 = x_1,...,X_n = x_m] \quad \forall x \in \mathbf{X}(\Omega)$$
+        y se dirá que $p_X$ es la función masa de probabilidad conjunta
+    
+    \end{definicion}
+    
+    \begin{definicion}[Función de densidad]
+    Sea $(\Omega, \mathcal{A}, P)$ un espacio de probabilidad y sea $X:\Omega \to \mathbb{R}$ una variable aleatoria continua tal que $F_X$ tiene densidad $f_X$ respecto de la medida de Lebesgue en $\mathbb{R}$. A la función $f_X:X(\Omega) \to \mathbb{R}$ se le conoce como la \textit{función de densidad de X}, y cumple,
+    $$F_X(x) = P[X \leq x] = \int_{-\infty}^x f_X(s) \; ds \quad \forall x \in X(\Omega)$$
+    
+    Si $\mathbf{X}$ fuera un vector aleatorio con valores en $\mathbb{R}^n$ entonces,
+    
+    $$F_X(x) = P[X_1 \leq x_1,...,X_n \leq x_n] = \int_{-\infty}^{x_n} ... \int_{-\infty}^{x_1} f_X(s_1,...,s_n) \; ds \quad \forall x = (x_1,...,x_n) \in X(\Omega)$$
+    \end{definicion}
+    
+    \begin{proposicion}[Propiedades f.d. y f.m.p.]~\smallskip
+    \begin{enumerate}
+        \item La función masa de probabilidad de una V.A. $X$ cumple:
+        \begin{enumerate}
+            \item $p_X(x) \geq 0 \quad \forall x \in X(\Omega)$
+            \item $\sum_{x\in X(\Omega)}p_X (x) = 1$
+        \end{enumerate}
+        \item La función de densidad de una V.A. $X$ cumple:
+        \begin{enumerate}
+            \item $f_X(x) > 0 \quad \forall x \in X(\Omega)$
+            \item $\int_{-\infty}^{+\infty} f_X(s) \; ds = 1$
+        \end{enumerate}
+    \end{enumerate}
+    
+    \end{proposicion}
+    
+    A nosotros nos interesan las distribuciones de probabilidad $P_X$ en $\mathbf{R}^n$ que son absolutamente continuas respecto a la medida de Lebesgue. En este caso, el teorema de \textit{Radon-Nikodym} \cite{probcourse} nos asegura que existe una función $f:\mathbb{R}^n \to \mathbf{R}_0^+$ tal que $P_X = f \lambda^n$. \\
+    
+    
+    Tras presentar todo lo anterior, veamos ahora un par de ejemplos de distribuciones bastante conocidas, en el caso discreto será la distribución binomial y en el caso continuo la distribución normal.
+    
+    \begin{ejemplo}
+    Sea $p \in [0,1]$ y $n \in \mathbf{N}$ y sea $X:\Omega \to \{1,...,n\}$ una V.A. tal que 
+    $$P[X=k] = \binom{n}{k} p^k (1-p)^{n-k}$$
+    La distribución $P_X =: P \circ X^{-1}$ se la conoce como \textit{distribución binomial} con parámetros $n$ y $p$, y se denota por $B(n,p)$. La función de distribución viene dada por 
+    $$F_X(x) = \sum_{k=0}^x  \binom{n}{k} p^k (1-p)^{n-k}$$
+    \end{ejemplo}
+
+
+    \begin{ejemplo}
+     Sea $\mu \in \mathbb{R}$ y $\sigma^2 > 0$ y sea $X$ una variable aleatoria real con 
+     $$P[X \leq x] = \frac{1}{\sqrt{2 \pi \sigma^2}} \int_{-\infty}^x exp \Big(-\frac{(t - \mu)^2}{2 \sigma^2}\Big) \; dt \quad \forall x \in \mathbb{R}$$
+     La distribución de probabilidad $P_X$ se la conoce con el nombre de \textit{distribución Normal} con parámetros $\mu$ y $\sigma^2$ y se suele denotar como $\mathcal{N}_{\mu,\sigma^2}$. En particular la distribución $\mathcal{N}_{0,1}$ es la conocida como distribución normal estándar
+    \end{ejemplo}
+     
+     
+    \begin{definicion}[Convergencia en probabilidad]
+        Sea $X:\Omega \to \R$ una variable aleatoria real. Sea $(X_n)_{n\in \N}$ una familia de variables aleatorias reales. Decimos que la secuencia $(X_n)_{n\in \N}$ converge en probabilidad a la variable aleatoria $X$ cuando 
+            \begin{equation}
+                P[|X_n - X| < \epsilon] \xrightarrow{n\rightarrow\infty} 0
+            \end{equation}  
+
+    \end{definicion}
+       
+      
+\subsection{Independencia y Probabilidad Condicionada}
+
+    La teoría de la medida no puede describir la estructura de dependencia que puede existir entre los eventos o las variables aleatorias. En este punto dejamos atrás la teoría de la medida para adentrarnos con más profundidad en la teoría de la probabilidad, donde definimos la independencia de los sucesos y variables aleatorias. La independencia es una noción fundamental de la teoría de la probabilidad y el cálculo de las dependencias es una de las principales tareas de la teoría, así también ocurre con la conocida probabilidad condicionada. En lo que sigue vamos a considerar que $(\Omega,\mathcal{A},P)$ es un espacio de probabilidad y los conjuntos $A \in \mathcal{A}$ como eventos.\\
+    
+    
+    \begin{definicion}[Independencia de eventos]
+        Sea $I$ un conjunto de índices arbitrarios y sea $(A_i)_{i\in I}$ una familia arbitraria de eventos. Dicha familia de eventos es independiente cuando para cualquier subconjunto finito de índices $J \subset I$ se verifica
+        $$ P[ \bigcap_{j \in J} A_j] = \prod_{j \in J} P[A_j] $$
+        donde P es una medida de probabilidad.
+    \end{definicion}    
+    
+    
+    \begin{definicion}[Independencia de variables aleatorias]
+     Sea  $I = \{1,...,n\}$ un conjunto finito de índices y $\{ (\Omega_i,\mathcal{A}_i) : i \in I \}$ una familia finita de espacios medibles. Para cada $i\in I$ sea $X_i:\Omega \to \Omega'$ una V.A. Diremos que la familia $(X_i)_{i \in I}$ de variables aleatorias es independiente cuando verifique
+     $$ F_X(x_1,...,x_n) = \prod_{i=0}^n F_{X_i}$$
+    \end{definicion}
+    
+    
+    \begin{definicion}[Probabilidad condicionada para eventos]\label{def:PCE}
+    Sea $B \in \mathcal{A}$ un evento. Se define la probabilidad condicionada dado B para cualquier $A \in \mathcal{A}$ como
+    
+    $$ P[A|B] = 
+        \left\{
+            \begin{array}{cc}
+                \frac{P[A \cap B]}{P[B]} &  P[B] > 0  \\
+                0 & P[B] = 0 
+            \end{array} 
+        \right.$$
+    
+    \end{definicion}
+      
+     \begin{proposicion}{
+     Dado $A,B \in \mathcal{A}$ equivalen las siguientes afirmaciones:
+     \begin{enumerate}
+         \item $A$ y $B$ son independientes
+         \item $P[A|B] = P[A]$
+         \item $P[B|A] = P[B]$
+     \end{enumerate}
+     }\end{proposicion}
+      
+    \begin{proposicion}
+    Bajo el pretexto de la definición \ref{def:PCE}, $P[\cdot | B]$ es una medida de probabilidad en $(\Omega,\mathcal{A})$
+    \end{proposicion}
+
+    La proposición anterior es reveladora ya que al tener una probabilidad condicionada como medida de probabilidad, podemos considerar un espacio probabilístico con dicha probabilidad condicionada asociada, dando lugar a la distribuciones de probabilidad condicionadas. \\
+    
+    Realicemos la construcción, para ello trasladamos el concepto de probabilidad condicionada para eventos a variables aleatorias reales. Para ello consideramos dos V.A. $X,Y:\Omega \to \mathbb{R}$. Para cada $y \in Y(\Omega)$ y $\epsilon > 0$ suponemos que el intervalo $(y-\epsilon,y+\epsilon) \subset Y(\Omega)$ y que la probabilidad $P[y-\epsilon < Y \leq y+\epsilon]$ no sea nula. Para cada $x \in X(\Omega)$ consideramos la expresión 
+    $$ P[X \leq x | y - \epsilon < Y \leq y + \epsilon] = \frac{P[X \leq x , y - \epsilon < Y \leq y + \epsilon]}{P[y-\epsilon < Y \leq y+\epsilon]} $$
+    
+    Dicha expresión se la conoce como la \textit{distribución de $X$ dado que $Y \in ]y - \epsilon, y + \epsilon [$}.
+    
+    \begin{definicion}[Distribución de Probabilidad Condicionada] \label{def:DPB}
+    Sean $X,Y$ dos V.A. reales. Se define la \textit{función de distribución de $X$ condicionada a que $Y=y$} como el siguiente límite siempre y cuando exista:
+    \begin{equation}\label{eq:limitProbCond}
+    F_{X|Y}(x|y) = \lim_{\epsilon \to 0+}P[X \leq x | y - \epsilon < Y \leq y + \epsilon]
+    \end{equation}
+    \end{definicion}
+    
+    Conociendo la función de distribución conocemos la distribución de la variable aleatoria. Ahora bien, sabemos que esta puede ser continua o discreta, definamos a continuación la función masa de probabilidad y de densidad para distribuciones condicionadas. \\
+    
+    \begin{definicion}[Función de densidad de probabilidad condicionada]
+    
+        Bajo el pretexto de la definición \ref{def:DPB} suponiendo que las dos V.A. son continuas, definimos la \textit{función de densidad de $X$ condicionada a $Y=y$}, $f_{X|Y}(x|y)$, como una función integrable no negativa que satisface
+        $$F_{X|Y} = \int_{-\infty}^x f_{X|Y}(t|y) \;dt \quad \forall x \in \mathbb{R} $$
+    
+    \end{definicion}    
+    
+    Supongamos que $(X,Y)$ es un vector aleatorio real continuo, nuestro objetivo es escribir la función de densidad de X condicionado a Y en función de la función de densidad conjunta y de la función de densidad de Y. Para ello, supongamos que la función de densidad de $P_{(X,Y)}$ es $f_{(X,Y)}$ y que la función de densidad de $P_Y$ es $f_Y$. Obviamente, dichas funciones han de ser continuas por ser funciones de densidad. Sí que hemos de suponer que $f_Y > 0$. En este caso tenemos que 
+    
+    \begin{equation}
+        \begin{aligned}
+            F_{X|Y}(x|y) & = \lim_{\epsilon \to 0+} \frac{P[X \leq x , y - \epsilon < Y \leq y + \epsilon]}{P[y-\epsilon < Y \leq y+\epsilon]}\\
+            & = \frac{\int_{-\infty}^x \Big[ \int_{y - \epsilon}^{y + \epsilon}f(u,v) \; dv \Big] \; du}{\int_{y - \epsilon}^{y + \epsilon} f_2(v) \; dv} \cdot \frac{\frac{1}{ \epsilon}}{\frac{1}{\epsilon}}
+        \end{aligned}
+    \end{equation}
+    
+    \noindent tomando límite obtenemos que 
+    
+    \begin{equation}
+        \begin{aligned}
+            F_{X|Y}(x|y) = \frac{ \int_{-\infty}^{x}f(u,v) \; du}{ f_2(v) \; dv} = \int_{-\infty}^{x} \Big[ \frac{f(u,y)}{f_2(y)} \Big]
+        \end{aligned}
+    \end{equation}
+    
+    \noindent se sigue que existe la función de densidad condicionada de $X$ dado $Y=y$ y se expresa como 
+    \begin{equation}
+        f_{X|Y}(x | y) = \frac{f(x,y)}{f_2(y)}, \quad f_2(y) > 0
+    \end{equation}
+    
+    \begin{definicion}[Función masa de probabilidad condicionada]
+    
+        Sea $(X,Y):\Omega \to \mathbb{R}^2$ un vector aleatorio real discreto. Fijado $y \in Y(\Omega)$ con $P[Y = y] > 0$ se define la función masa de probabilidad de $X$ condicionado a que $Y=y$
+        
+        \begin{equation}
+            P [X = x | Y = y] = \frac{P[X=x, Y=y]}{P[Y=y]}
+        \end{equation}
+    \end{definicion}
+
+
+    Para terminar con esta sección damos cabida a dos teoremas importantes que contribuyen en gran medida al calculo de probabilidades. \\
+    
+    \begin{teorema}[Formula de la suma]
+    
+        Sea $I$ con conjunto de índices numerable y sea $(B_i)_{i \in I}$ una familia de conjuntos disjuntos dos a dos tal que $P[\bigcup_{i\in I}B_i] = 1$. entonces para cualquier $A \in \mathcal{A}$,
+        \begin{equation}
+            P[A] = \sum_{i \in I} P[A|B_i] P[B_i]
+        \end{equation}
+    
+    \end{teorema}
+    
+    \begin{teorema}[Formula de Bayes]
+        Sea $I$ con conjunto de índices numerable y sea $(B_i)_{i \in I}$ una familia de conjuntos disjuntos dos a dos tal que $P[\bigcup_{i\in I}B_i] = 1$. Entonces para cualquier $A \in \mathcal{A}$ con $P[A] > 0$ y cualquier $k \in I$,
+        \begin{equation}
+            P[B_k|A] = \frac{P[A|B_k] P[B_k]}{\sum_{i \in I} P[A|B_i] P[B_i]}
+        \end{equation}
+    \end{teorema}   
+   
+   
+   
+\subsection{Momentos de una variable Aleatoria}
+    
+    En esta sección vamos a definir una serie de características numéricas ligadas a las variables aleatorias. De este modo definiremos la \textit{esperanza} la cual juega el papel de centro de gravedad de la distribución y nos indica alrededor de qué valor se sitúa nuestra variable o vector. También definiremos lo que se conoce como \textit{varianza} la cual nos informa de cuan dispersos o agrupados se encuentran los valores alrededor de la esperanza. Estas dos características son casos particulares de otra herramienta mucho más general, llamada \textit{momentos}, los cuales nos pueden llegar a aportar un conocimiento exhaustivo de la variable aleatoria. Estos conocimientos son clave de cara a la teoría del aprendizaje, sobre todo a la parte que corresponde al compromiso \textit{sesgo-varianza} que presentaremos más adelante. 
+    
+    
+    \begin{definicion}[Esperanza de una variable aleatoria]
+    Sea $X$, una V.A. definida sobre un espacio de probabilidad, integrable en $\Omega$ respecto de $P$, entonces diremos que existe su \textit{esperanza o valor esperado}, en cuyo caso es
+    \begin{equation}
+        \E(X) := \int_{\Omega} X \; dP
+    \end{equation}
+    \end{definicion}
+    
+    
+    \begin{definicion}[Varianza de una variable Aleatoria]
+    Sea $X$ una V.A. real definida sobre un espacio de probabilidad, tal que $X^2$ es integrable en $\Omega$ respecto de $P$. Se define la \textit{varianza} como 
+    $$Var(X) := \E[(X-\E[X])^2]$$
+    \noindent y se denota por $\sigma^2$ o por $VAR(X)$. Además, también se define la desviación típica como $\sigma:= \sqrt{VAR(X)}$. 
+    \end{definicion}
+    
+    
+    \begin{definicion}[Momentos]
+    Sea X una V.A. real definida sobre un espacio de probabilidad. Si $X^k$ es integrable en $\Omega$ respecto de $P$, entonces podemos definir:
+    \begin{enumerate}
+        
+        \item \textbf{Momentos no centrados de orden k} \\
+        \begin{equation}
+            m_k := \E [X^k]
+        \end{equation}
+        
+        \item \textbf{Momentos Centrados de orden k}
+        \begin{equation}
+            \mu_k := \E[(X - \E[X])^k]
+        \end{equation}
+        
+    \end{enumerate}
+    \end{definicion}
+    
+    En el caso de que tengamos un vector aleatorio real $\mathbf{X} = (X_1,...,X_n)$ las definiciones anteriores se extienden a cada una de las componentes, siempre y cuando sea posible. De este modo, la esperanza queda como 
+    
+    $$\E [\mathbf{X}] = (\E[X_1],...,\E[X_n]))$$
+    
+    \noindent y los momentos centrados y no centrados de orden $k$ 
+    \begin{equation}
+        \begin{aligned}
+            \mu_{k} := (\E[(X_1 - \E[X_1])^k],...,\E[(X_n - \E[X_n])^k]), && m_{k} = (\E[X^k],...,\E[X^k]) 
+        \end{aligned}
+    \end{equation}  
+       
+       
+    Enseguida notamos que la varianza es el momento centrado de orden dos y la esperanza el momento no centrado de orden uno.
+    
+    \begin{definicion}[Covarianza]
+    
+        Sean $X,Y$ dos V.A. definidas sobre el mismo espacio de probabilidad. Cuando $X$,$Y$ y $XY$ sean $P$-integrables en $\Omega$ se define la \textit{covarianza} de $X$ como 
+        $$COV(X,Y) := \E[(X-\E[X])(Y - \E[Y])]$$
+    
+    \end{definicion}
+    
+    Como caso particular tenemos que $COV(X,X) = VAR(X)$ y cuando ${COV(X,Y) \not= 0}$ diremos que las variables $X$ e $Y$ están correladas, en otro caso, incorreladas.
+       
+       
+     \begin{proposicion}[Propiedades de la esperanza]
+     Sea $X$,$Y$ y $(X_n)_{n\in \N}$ variables aleatorias reales para las que existe la esperanza. 
+     \begin{enumerate}
+         \item Si $P_X = P_Y$, entonces $\E[X] = \E[Y]$
+         \item La esperanza es lineal
+         \item La esperanza es monótona
+         \item $|\E[X]| \leq \E[|X|]$
+         \item Si $X \geq 0$ c.p.d. entonces $\E[X] = 0 \iff X = 0 \;  c.p.d.$
+         \item Si $X_n \geq 0$ c.p.d. entonces $\E[\sum_{n=1}^{\infty}] = \sum_{n=1}^{\infty} \E[X_n]$
+     \end{enumerate}
+     \end{proposicion}
+     
+     Todas estas propiedades se heredan de las propiedades de la integral, así que la comprobación es inmediata.
+       
+     \begin{proposicion}
+     Sean $X,Y$ dos variables aleatorias reales definidas en un espacio de probabilidad. Supongamos que existe la varianza y la covarianza para $X,Y$ entonces
+     \begin{equation}
+         COV(X,Y)= \E[XY] - \E[X]\E[Y]
+     \end{equation}
+     \noindent y en particular
+     \begin{equation}
+         VAR(X)= \E[X^2] + \E[X]^2
+     \end{equation}
+     \end{proposicion}
+     
+     Vamos a ver ahora un teorema del cual podemos sacar la conclusión de que variables independientes están incorreladas. Hacemos especial hincapié en el que el recíproco no se cumple. Primeramente, decir que la correlación es un modo de ver el grado o la fuerza de dependencia lineal que hay entre las variables. De este modo, si dos variables son independientes, en particular, son linealmente independientes. Recíprocamente, si son incorreladas, significa que no hay dependencia lineal, pero eso no quiere decir que no exista otro tipo de dependencia.
+     
+     \begin{teorema}
+     Sean $X,Y$ dos variables aleatorias reales independientes e integrables en $\Omega$ con respecto a $P$. Entonces $XY$ es integrable y $\E[XY] = \E[X]\E[Y]$. 
+     \end{teorema}
+     
+
+     La definición de esperanza resulta en la práctica un tanto compleja de calcular. Por ello vamos a dar una nueva forma de calcularla y en el espacio en el que nos interesa, que es en $(\R^n,\mathcal{B}(\R^n))$. Para ello vamos a considerar una variable aleatoria $X:\Omega \to \R^n$, una función medible $f:\R^n \to \R$, la cual a nosotros nos interesa que sea la identidad, pero por hacerlo más general la consideramos genérica. Suponemos también que $P_X$ tiene función de densidad $p_X$ respecto de la medida de Lebesgue en $\R^n$. Entonces aplicando la proposición \ref{prop:int1} y \ref{prop:int2} tenemos que 
+     
+    \begin{equation}
+         \E[f(X)]= \int_{X(\Omega)} p_X f \; d\lambda^n =  \int_{X(\Omega)} f \; d P_X
+     \end{equation}
+     
+     \noindent Y en el caso en el que la variable aleatoria fuese discreta entonces tenemos que 
+     \begin{equation}
+         \E[f(X)] = \sum_{x\in X(\Omega)} p_X(x)f(x)
+     \end{equation}
+     
+    Así de este modo, simplificamos la complejidad a la hora del cálculo de al esperanza de una V.A. ya que en esas expresiones no interviene la medida de probabilidad sobre el espacio de partida, solo la distribución de la variable aleatoria. Más adelante usaremos 
+    $$\E_{ X \sim P_X}[X] = \int_{X(\Omega)}x \; dP_X(x)$$
+    \noindent para hacer hincapié a la distribución de la V.A. obviando la medida de probabilidad sobre el espacio de partida. Para acabar esta sección vamos introducir una nueva definición más que nos va a resultar útil conocer en un futuro. 
+    
+    \begin{definicion} [Esperanza Condicionada]
+    Sean $X$ e $Y$ dos variables aleatorias definidas en el mismo espacio de probabilidad y sea $g:\R \to \R$ una función medible. La esperanza de la v.a. $g(X)$ condicionada a que $Y=y$, $\E[g(X)|Y]$, es una v.a. real dada por
+    
+    \begin{equation}
+        \E[g(X)|Y] := 
+        \left\{
+        \begin{array}{cc}
+             \sum_x g(x)P[X=x|Y=y] & (X,Y) \; es \; v.a. \; discreto \; y \; P[Y=y] > 0  \\
+             \int_\R g(x)f_{X|Y}(x|y) \; dx & (X,Y) \; es \; v.a. \; continuo \; y \; f_Y(y) > 0
+        \end{array}
+        \right.
+    \end{equation}
+    \end{definicion}
+    
+    
+
+    
+
+\endinput

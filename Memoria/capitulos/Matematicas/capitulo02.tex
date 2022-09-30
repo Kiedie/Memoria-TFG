@@ -1,0 +1,225 @@
+% !TeX root = ../libro.tex
+% !TeX encoding = utf8
+
+\setchapterpreamble[c][0.75\linewidth]{%
+	\sffamily
+  
+    Hasta ahora se han ido construyendo las bases para lo que se viene mediante la introducción de conceptos clave para entender la teoría del aprendizaje. Llegado a este punto y partiendo de los fundamentos anteriores, se continuará con una de las desigualdades más importantes en la teoría del aprendizaje, la desigualdad de Hoeffding.  Aunque este capítulo entra dentro del marco de la probabilidad, la importancia que desempeña en los capítulos siguientes es tal que se ha optado por dedicarle su propio capítulo. Esta desigualdad es tan importante por ser la base sobre las que se fundamentan las cotas de generalización que se presentarán en el capítulo siguiente, las cuales juegan un papel fundamental en el marco del aprendizaje. \\
+    
+   Para entender y demostrar esta desigualdad se requerirá previamente de algunas otras desigualdades. Entre ellas la desigualdad de Markov o también conocida como la primera desigualdad de Chebyshev la cual acota la probabilidad de que una variable sea mayor o igual que un valor por un cociente que depende de la esperanza de dicha variable aleatoria y el propio valor. Se comentará también que dicha desigualdad es un caso particular de otra desigualdad más general, ya que la que se usa está en términos probabilísticos frente a la general que viene dada en términos de un espacio de medida. Por otra parte, se dará a conocer un lema previo que es fundamental para poder demostrar la desigualdad de Hoeffing y da una manera de acotar la esperanza de la exponencial de una variable aleatoria en función de un número real positivo cualquiera. \\
+    
+    Las referencias empleadas para la elaboración de este capítulo han sido \cite{PSE,FML,shadrin2004twelve}.
+    
+	\par\bigskip
+}
+\chapter{Desigualdad de Hoeffding}\label{ch:DesigualdadHoeffding}
+
+\newpage 
+\section{Desigualdad de Markov}
+
+    
+    %%%%%
+    
+    \begin{lema}[Desigualdad de Markov (Caso particular)] \label{lema:DesMarkov}
+    Sea $X$ una variable aleatoria real no negativa para la que exista la esperanza y $a>0$, entonces, la probabilidad de que la v.a. $X$ sea a lo menos $a$ es como mucho, la esperanza de la v.a. dividida por a, esto es,
+    \begin{equation}\label{eq:eqDesMarkov}
+        P[X\geq a] \leq \frac{\E[X]}{a}
+    \end{equation}
+    \end{lema}
+    
+        \begin{proof}
+        Usando que $X$ es no negativa, se tiene que 
+        \begin{equation}
+            \E[X] = \int_{-\infty}^{\infty}x f(x) \; dx = \int_{0}^{\infty} xf(x) \; dx
+        \end{equation}
+        
+        \noindent Usando que $a>0$,
+        \begin{equation*}
+            \begin{aligned}
+                \E[X] = & \int_0^a xf(x) \; dx + \int_a^{\infty} xf(x) \; dx \\
+                & \geq \int_a^{\infty} xf(x) dx \\
+                & \geq \int_a^{\infty} af(x) \; dx \\
+                & = a \int_a^{\infty} f(x) \; dx \\
+                & = aP[X \geq a]
+            \end{aligned}
+        \end{equation*}
+        Pasando $a$ dividiendo al otro miembro concluimos la demostración.
+        \end{proof}
+    %%%%%
+    
+    Partiendo del lema anterior, considerando $t>0$ y que existe la varianza para $X$, podemos considerar la variable aleatoria $(X-\E[X])^2$, entonces, aplicando la desigualdad \eqref{eq:eqDesMarkov} tenemos que 
+    \begin{equation}
+       P[|X-\E[(X)|\geq t^2]  = P[(X-\E[(X])^2 \geq t^2] \leq \frac{\E[(X - \E[X])^2]}{t^2} = \frac{Var(X)}{t^2}
+    \end{equation}
+    
+    \noindent Hemos probado el siguiente corolario.
+    
+    \begin{corolario}[Segunda Desigualdad de Chebyshev]
+    Sea $X$ una variable aleatoria para la que existe la experanza y la varianza. Entonces para cualquier número real $t>0$ se tiene que
+    \begin{equation}
+        P[|X - \E[X]| \geq t] \leq \frac{Var(X)}{t^2}
+    \end{equation}
+    \end{corolario}
+    
+    Este colorario nos dice que la probabilidad de que una variable aleatoria esté alejada de su esperanza en más de un umbral, $t$, es a lo sumo el cociente de la varianza partido por el cuadrado del umbral. Intuitivamente, si fijamos el umbral y haciendo alta la varianza  (los valores de la variable aleatoria están muy dispersos con respecto al centro) tendremos que la probabilidad va a ser elevada. En cambio, si hacemos la varianza baja (los valores que toma $X$ están aglomerados entorno a la esperanza) la probabilidad será pequeña. Si fijamos la varianza $Var[X] > 0$ y jugamos con el valor del umbral, tenemos que cuanto mayor sea el umbral, menor es la probabilidad de que $X$ esté alejado de $\E[X]$ más del umbral. En cambio, cuando $t$ sea muy pequeño, la probabilidad será mayor. \\ 
+    
+    
+    Existe una versión extendida del lema \ref{lema:DesMarkov} para transformaciones de la v.a. por funciones monótonas crecientes no negativas. Vamos a ver como sería y a extraer un importante colorario que se prueba de forma inmediata. \\
+    
+    \begin{lema}[Desigualdad Markov (Versión extendida)]
+    Sea $X$ una variable aleatoria real no negativa para la que exista la esperanza y sea $\phi$ una función monótona creciente no negativa en los reales positivos. Sea $a \geq 0$ tal que $\phi(a) > 0$, entonces,
+    \begin{equation}
+        P[X\geq a] \leq \frac{\E[\phi(X)]}{\phi(a)}
+    \end{equation}
+    
+    \end{lema}
+    
+    \begin{corolario}
+    Si $X$ es una variable aleatoria y $a > 0$, entonces
+    \begin{equation}
+        P[|X| \geq a] \leq \frac{\E[|X^n|]}{a^n}
+    \end{equation}
+    \end{corolario}
+    
+    
+    Hemos enunciado y demostrado la desigualdad de Markov en términos de un espacio probabilístico, pues es en donde nos va a hacer falta. Sin embargo, esta desigualdad es mucho más general que está presente en la teoría de la medida, aunque en este campo es más bien conocida como una de las \textit{desigualdades de Chebyshev}, en concreto, la primera. Vamos a enunciar la desigualdad y demostrarla de manera más general.
+    
+    %%%%%
+    \begin{lema}[Desigualdad de Markov (Caso General)]
+    Sea $(\Omega,\Sigma,\mu)$ un espacio de medida. Sea ${f:\Omega \to \R\cup\{-\infty,\infty\}}$ y sea $\epsilon >0$, entonces
+    \begin{equation}
+        \mu(\{ \omega \in \Omega : |f(x)| \geq \epsilon \}) \leq \frac{1}{\epsilon} \int_\Omega |f| \; d\mu
+    \end{equation}
+    \end{lema}
+
+    \begin{proof}
+    Se puede suponer sin pérdida de generalidad que la función $f$ es no negativa por venir expresada en términos del valor absoluto. Ahora se considera una función con valores reales $s:\Omega \to \R$ definida por
+    \begin{equation}
+        s(x) = \left\{
+            \begin{array}{cc}
+                 \epsilon & si \; f(x) \geq \epsilon  \\
+                 0 & si\; f(x) < \epsilon 
+            \end{array}
+        \right.
+    \end{equation}
+    \noindent Se verifica que $0 \leq s(x) \leq f(x)$. Usando la monotonía de la integral de Lebesgue,
+    
+    \begin{equation}
+        \int_\Omega f(x) \; d\mu \geq \int_\Omega s(x) \; \mu = \epsilon d\mu(\{\omega \in \Omega : f(x) \geq \epsilon \})
+    \end{equation}
+    
+    \noindent finalmente, diviéndiendo ambos miembros de la desigualdad por $\epsilon > 0$ se concluye la prueba.
+    \end{proof}
+    %%%%%
+
+\section{Desigualdad de Hoeffding}
+    \begin{lema}[Lema de Hoeffding]\label{lema:Hoeffding}
+    Sea $X$ una variable aleatoria tal que ${\E[X] = 0}$ y ${a \leq X \leq b}$ con ${a,b \in \R}$ y ${a < b}$. Entonces para cualquier $t>0$ se verifica que 
+    \begin{equation}
+        \E[e^{tX}] \leq \exp{\Big(\frac{t^2(b-a)^2}{8}\Big)}
+    \end{equation}
+    \end{lema}
+    
+        \begin{proof}
+            Gracias a la convexidad de la función exponencial se tiene que para todo $x \in [a,b]$,
+            \begin{equation}
+                e^{tx} \leq \frac{b-x}{b-a}e^{ta} +  \frac{x-a}{b-a}e^{tb}
+            \end{equation}
+            
+            \noindent Aplicando esperanza a ambos miembros de la desigualdad y usando que $\E[X] = 0$, se tiene que,
+            \begin{equation}
+            \begin{aligned}
+                \E[e^{tX}] & \leq \E \Big[ \frac{b-X}{b-a} e^{ta} \Big] + \E \Big[\frac{X - a}{b - a} e^{tb} \Big] \\ 
+                 & = \frac{b-\E[X]}{b-a} e^{ta} + \frac{\E[X] - a}{b - a} e^{tb} \\
+                 & = \frac{b}{b-a} e^{ta} + \frac{- a}{b - a} e^{tb} \\
+                 & = e^{\phi(t)}
+            \end{aligned}
+            \end{equation}
+            
+            \noindent donde,
+            
+            \begin{equation}
+                \phi(t) = \log\Big(\frac{b}{b-a} e^{ta} + \frac{- a}{b - a} e^{tb}\Big) = ta + \log\Big(\frac{b}{b-a} + \frac{- a}{b - a} e^{t(b-a)}\Big)
+            \end{equation}
+            
+            \noindent Para cualquier $t>0$, la primera y segunda derivada de $\phi$ son:
+            \begin{equation}
+                \begin{aligned}
+                        \phi'(t) & = a - \frac{a}{\frac{b}{b-a} e^{-t(b-a)} - \frac{a}{b-a}}, \\
+                        \phi''(t) & = \frac{-ab e^{-t(b-a)}}{[\frac{b}{b-a} e^{-t(b-a)} - \frac{a}{b-a}]^2} \\
+                        & = \frac{\alpha(1-\alpha) e^{-t(b-a)}(b-a)^2}{[(1-\alpha) e^{-t(b-a)} + \alpha]^2} \\
+                        & = \frac{\alpha}{[(1-\alpha) e^{-t(b-a)} + \alpha]} \frac{(1-\alpha) e^{-t(b-a)}}{[(1-\alpha) e^{-t(b-a)} + \alpha]}(b-a)^2
+                \end{aligned}
+            \end{equation}
+            
+            \noindent donde $\alpha = \frac{-a}{b-a}$. Nótese que $\phi(0) = \phi'(0) = 0$. Ahora se renombra la segunda derivada usando $u=\frac{\alpha}{[(1-\alpha) e^{-t(b-a)} + \alpha]}$ obteniendo así,
+            \begin{equation}
+                \phi''(t) = u(1-u)(b-a)^2
+            \end{equation}
+            \noindent Como $u \in [0,1]$, entonces $u(1-u) \leq \frac{1}{4}$ y en consecuencia $\phi'(t) \leq \frac{(b-a)^2}{4}$. Por tanto, aplicando el desarrollo de Taylor de segundo orden a la función $\phi$, existe $\theta \in [0,t]$ tal que
+            
+            \begin{equation}
+                \phi(t) = \phi(0) + t\phi'(t) + \frac{t^2}{2}\phi''(t) \leq t^2 \frac{(b-a)^2}{8}
+            \end{equation}
+            
+            \noindent completando así la demostración. 
+            
+        \end{proof}
+    
+    
+    
+     Notamos que la condición $\E[X] = 0$ impuesta en el lema no es estrictamente necesaria, ya que si no estuviese bastaría con reemplazar $X$ por $X - \E[X]$ en cuyo dicho caso, ya si se puede asumir que $\E[X] = 0$ \\
+    
+    Damos cabida al teorema para el cual hemos dedicado toda esta sección y cuya demostración hace uso de la técnica de cota de \textit{Chernoff}. Esta técnica consiste en que dada una v.a. $X$ y $\epsilon > 0$, acotar $P[X \geq a]$ usando la \textit{desigualdad de Markov}. Entonces  para cualquier $t>0$ se tendría que 
+    \begin{equation}
+        P[X \geq \e ] = P [e^{tX} \geq e^{t\e}] \leq e^{-t\epsilon} \E[e^tX]
+    \end{equation}
+    
+    \noindent Posteriormente, se busca una cota superior, llamémosla $g(t)$, para $\E[e^{tX}]$ y seleccionaríamos $t$ para minimizar $e^{-t\e}g(t)$. Tras explicar el procedimiento, introducimos y demostrados este resultado. \\
+    
+    \begin{teorema}[Desigualdad de Hoeffding]
+    Sea $X1,...,X_m$ variables aleatorias independientes con $a_i \leq X_i \leq b_i$ para todo $i \in [1,m]$. Sea $S_m = \sum_{i=1}^m X_i$. Entonces para cualquier $\epsilon > 0$ se verifican las siguientes desigualdades:
+    
+    \begin{equation}
+        \begin{aligned}
+            P[S_m - \E[S_m] \geq \epsilon] & \leq e^{\frac{-2\epsilon^2}{\sum_{i=1}^m (b_i-a_i)^2}} \\
+            P[S_m - \E[S_m] \leq -\epsilon] & \leq e^{\frac{-2\epsilon^2}{\sum_{i=1}^m (b_i-a_i)^2}}
+        \end{aligned}
+    \end{equation}
+    
+    \end{teorema}
+    
+    \begin{proof}
+        Usando la técnica anteriormente expuesta, teniendo en cuenta que las variables aleatorias son independientes, aplicando la desigualdad de Markov y el lema \ref{lema:Hoeffding} tenemos que
+        
+        \begin{equation}
+            \begin{aligned}
+                    P[S_m - \E[S_m] \geq \e] & = P \Big[\exp\Big((S_m - \E[S_m])t\Big) \geq \exp(t \e)\Big] \\
+                    & \leq \exp(-t \e) \E\Big[ \exp \Big(t (S_m - \E[S_m]) \Big) \Big] \quad & (Desigualdad \; Markov) \\
+                    & = \exp(-t \e) \E\Big[\exp \Big( t \sum_{i=1}^m(X_i - \E[X_i]) \Big) \Big] \\
+                    & \leq \prod_{i=1}^m \exp(-t\e) \E\Big[\exp \Big( t (X_i - \E[X_i]) \Big) \Big] \quad & (Independencia \; X_i)\\
+                    & \leq \prod_{i=1}^m \exp(-t\e) \exp( \frac{t^2 (b_i - a_i)}{8} ) \quad & (Lema \; \ref{lema:DesMarkov}) \\
+                    & = \exp (-t\e) \exp \Big( \frac{t^2 \sum_{i=1}^m(b_i - a_i)}{8} \Big) \\
+                    & = \exp \Big( -t\e + \frac{t^2 \sum_{i=1}^m(b_i - a_i)}{8} \Big)
+            \end{aligned}
+        \end{equation}
+        
+        Ya se tendría una cota para cualquier valor de $t>0$, pero el objetivo es obtener la cota más pequeña.
+        Como la función exponencial es estrictamente creciente, minimizar la función dada por $\phi(t) = -t\e + \frac{t^2 \sum_{i=1}^m(b_i - a_i)}{8}$ es equivalente a minimizar $e^{\phi(t)}$. Es inmediato comprobar que dicha función alcanza un mínimo absoluto en ${t=\frac{4\e}{\sum_{i=0}^m(b_i-a_i)^2}}$, por lo que
+        \begin{equation}
+            P [S_m - \E[S_m] \geq \e] \leq  e^{\frac{-2\epsilon^2}{\sum_{i=1}^m (b_i-a_i)^2}}
+        \end{equation}
+        
+        \noindent La demostración de la otra desigualdad es totalmente análoga a la anterior. 
+    \end{proof}
+    
+    En el siguiente tema usaremos una versión modificada de esta desigualdad, pero sin dejar de ser equivalente. Sea un conjunto $X_1,...,X_m$ de variables aleatorias $i.i.d.$ y sea $\overline{X} = \frac{1}{m} \sum_{i=1}^m X_i$. Asumimos que $\E[\overline{X}] = \mu$ y $\Pb[a \leq X_i \leq b] = 1$ para todo $i$. Entonces, para cualquier $\e > 0$ se tiene,
+    
+    \begin{equation}\label{eq:Hoeffding}
+        \Pb \Big[ \Big| \overline{X} - \mu \Big| \geq \e \Big] \leq 2 \exp{ \Big( {\frac{-2m\e^2}{(b-a)^2}} \Big) }
+    \end{equation}
+
+\endinput
+%------------------------------------------------------------------------------------
+% FIN DEL CAPÍTULO. 
+%------------------------------------------------------------------------------------

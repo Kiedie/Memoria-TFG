@@ -1,0 +1,47 @@
+% !TeX root = ../libro.tex
+% !TeX encoding = utf8
+%
+%*******************************************************
+% Summary
+%*******************************************************
+
+
+\chapter{Resumen}
+
+
+    Aunque el documento conste de 5 partes, se puede ver como tres grandes partes: matemáticas, informática y clasificación de arritmias. La parte de matemáticas se centra en describir las bases del aprendizaje estadístico, previamente detallando los pilares del mismo para ir construyendo progresivamente esta teoría. El aprendizaje estadístico se fundamente en la probabilidad, la cual a su vez requiere de conceptos de teoría de la medida e integración. De este modo, se comienza dando unos fundamentos muy básicos sobre estas materias para introducir la probabilidad y así desembocar más tarde en la teoría del aprendizaje.\\
+    
+    En la teoría del aprendizaje, se verán algunos resultados que son generales, pero la mayoría del trabajo está enfocado en un caso particular y especialmente sencillo, la clasificación binaria. El objetivo será llegar hasta el teorema fundamental del aprendizaje estadístico, pero para ello se deberán detallar muchos conceptos previos. Se empezará con el aprendizaje correcto probablemente aproximado (PAC) que permite evaluar la dificultad de un problema en el contexto del aprendizaje supervisado y una generalización suya, el aprendizaje PAC agnóstico. Para esta generalización también se definirá el aprendizaje por convergencia uniforme, ya que será necesario para dar un resultado sobre las clases de hipótesis que son PAC agnósticas aprendibles. \\
+    
+    Continuando todavía en el marco del aprendizaje estadístico, se da un salto al estudio de las cotas de generalización que son una herramienta muy importante que miden cuan bien el modelo ha conseguido trascender el aprendizaje para lograr unos correctos resultados fuera de los datos de entrenamiento. Se clasificarán las cotas de generalización en función del conjunto de hipótesis, así se tendrán cotas de generalización para conjunto de hipótesis finitos y para conjuntos de hipótesis infinitos. Es en esta última parte donde comienza la teoría de la dimensión de Vapnik-Chervonenkis más conocida con el nombre de dimensión VC. \\
+    
+    La dimensión de Vapnik-Chervonenkis es de vital importancia pues hasta ahora, la clase de hipótesis que se han usado son aquellas que tienen cardinal finito. Esta teoría establece la viabilidad del aprendizaje en términos de clases de hipótesis con cardinal infinito, por lo que la gama de estos conjuntos que se pueden abarcar será mucho más grande. Un resultado importante será la cota de generalización VC. Se concluirá dicha sección con el teorema fundamental del aprendizaje estadístico el cual relaciona todos los conceptos comentados hasta ahora y da una equivalencia entre la clases de hipótesis con dimensión VC finita y las clases de hipótesis PAC aprendibles. \\
+
+    Para terminar la parte matemática del proyecto se introducirá el teorema de aproximación universal que expone que la salida producida por una red neuronal es densa en el espacio de funciones continuas en el cubo unitario $n$-dimensional.  \\
+
+
+    En la parte de informática se introducirán las redes neuronales prealimentadas junto con su proceso de entrenamiento. Tras esto, se introducen las redes neuronales convolucionales. Este tipo de redes surgieron con la finalidad de identificar patrones u objetivos en imágenes, pero también tienen una amplia aplicación en señales unidimensionales. Para terminar con la parte informática se verán las redes neuronales recurrentes (RNN). Este tipo de redes tienen la habilidad de recordar y olvidar información a lo largo del tiempo, algo que es verdaderamente útil. Hay muchos tipos de redes neuronales recurrentes, en particular esta sección se centrará en las conocidas como LSTM y GRU que resuelven un problema muy común que presentan, la dependencia a corto y largo plazo causada por el desvanecimiento y/o la explosión del gradiente.  \\
+    
+    En la parte de clasificación de arritmias se presenta un problema de gran relevancia en la actualidad. La arritmia supone un grave problema para la salud y en el peor de los casos, la muerte. Es una enfermedad muy presente en nuestro día a día. Los especialistas sanitarios las diagnostican analizando las señales proporcionadas por un electrocardiograma (ECG) el cual mide la actividad eléctrica del corazón. La automatización de la detección y clasificación de arritmias es algo de vital importancia no solo para los pacientes, sino también para los médicos.\\
+    
+    Hay dos enfoques para enfrentar este problema, el tradicional y el moderno. Es en este último enfoque en donde el aprendizaje profundo juega un papel clave y resuelve el principal inconveniente que exige el enfoque tradicional, poseer un conocimiento a priori. Para el desarrollo de esta parte se usará una base, de una competición del año 2017, para clasificar un tipo de arritmia llamada \textit{fibrilación auricular}. Los modelos a usar serán de dos tipos, los primeros son modelos ya propuestos por la literatura, los cuales se replicarán y probarán. Los segundos son un conjunto de tres propuesta propias obtenidas tras un proceso experimental. La primera propuesta consistirá en una arquitectura de red convolucional estándar sin nada que destacar. La segunda propuesta será una combinación de CNN y LSTM. La última propuesta será una variante de la segunda pero cambiando las unidades LSTM por GRU. \\
+    
+    Los mejores resultados son los de los modelos ganadores de la competición. Los peores resultados lo presentan aquellos modelos extraídos de la literatura por estar diseñados específicamente para tratar con otras bases de datos más o menos complejas que la empleada. Finalmente, los modelos propios, pese a no superar a los ganadores, obtuvieron buenos resultados dignos de la competición. \\
+    
+    \begin{center}
+        \textbf{Palabras clave:}
+        \begin{center}
+            Fibrilación Auricular, Arritmia, Aprendizaje Profundo, Clasificación, Inteligencia Artificial, Redes Neuronales, LSTM, GRU. 
+        \end{center}
+    \end{center}
+    
+
+
+    
+
+
+
+
+
+
+\endinput

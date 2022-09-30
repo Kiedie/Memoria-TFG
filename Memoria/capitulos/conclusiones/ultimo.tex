@@ -1,0 +1,29 @@
+% !TeX root = ../libro.tex
+% !TeX encoding = utf8
+\setchapterpreamble[c][0.90\linewidth]{%
+	\sffamily
+  
+   
+	\par\bigskip
+}
+\chapter{Conclusiones y Trabajo Futuro}\label{ch:Conclusiones}
+
+\section{Conclusiones}
+
+    Como se comentó en el capítulo \ref{ch:objetivos}, esté trabajo presenta dos grandes objetivos los cuales han sido cubiertos a lo largo de todo este documento. Veamos a continuación las conclusiones obtenidas. \\
+    
+    Por un lado tenemos que la mayoría de los problemas de aprendizaje profundo a los que nos vamos a enfrentar presentan una clase de hipótesis infinita, lo que implica el estudio de otras características para discernir si el modelo es PAC agnóstico. Por suerte, las redes neuronales presentan una dimensión VC finita, lo que equivale a que estos modelos son PAC agnóstico aprendibles en virtud del teorema fundamental del aprendizaje estadístico. Por otra parte, el teorema de aproximación universal nos muestra el potencial que presenta las redes neuronales por ser capaces de aproximar cualquier función continua en un compacto. En resumidas cuentas, la teoría matemática que subyace por detrás del aprendizaje profundo avala el empleo de estas técnicas para problemas de aprendizaje. \\
+
+    En este proyecto hemos visto como se han utilizado modelos de aprendizaje profundo para resolver la tarea de clasificación de electrocardiogramas. Los modelos tradicionales, que no usan técnicas de deep Learning, presentan una etapa de extracción de características y es obligación del investigador poseer conocimiento previo sobre el campo, lo cual puede llegar a suponer un inconveniente. Esa adquisición de conocimiento previo supone un gran gasto en tiempo y en esfuerzo por parte del investigador que lleve a cabo la tarea pudiéndosela ahorrar al emplear modelos basados en Deep Learning. Gracias a este enfoque, el ingeniero que los programe no debe de encargarse de qué información es la que se debe de usar ya que son estos modelos los que deciden por ellos qué información usar y cual no.  \\
+    
+    En un primer momento se pensó que los modelos avalados por la literatura ofrecerían un buen comportamiento. En cambio, los pésimos resultados demostraron que no eran buenos candidatos. De este modo, se propusieron otros modelos de Deep Learning además de los ya mencionados con el objetivo de obtener unos resultados muchos mejores, que aunque no superen a los modelos ganadores de la competición hubiesen sido dignos competidores en caso de haber participado. Sin embargo, presentan una gran inconveniente, y es la incapacidad de clasificar ritmos ruidosos así como la dificultad para clasificar fibrilaciones auriculares. De los modelos propuestos, el que mejores resultados presenta es el modelo CNN, estando por encima de los modelos LSTM y GRU. Se piensa que estos dos últimos modelos pueden llegar a mejorar al primero si se refinan lo suficiente. En conclusión, todos los modelos presentan grandes limitaciones condicionando sus resultados en mayor o menor medida.\\
+    
+
+    
+    \section{Trabajo Futuro}
+    
+    El abanico de posibilidades para trabajos futuros es muy grande y debe de estar enfocado a solventar, entre otras cosas, los problemas con los que nos hemos ido encontrando y por supuesto, a mejorar los resultados que se han obtenido.  \\ 
+    
+    El principal problema al que nos enfrentamos es por parte de la base de datos. Por un lado presenta una cantidad pequeña de instancias, y por otro, cuenta con un gran desbalanceo de clases. Sería muy interesante ampliarla en la medida de lo posible con el objetivo de equilibrar las clases minoritarias. Otra propuesta interesante sería incluir más clases como por ejemplo, otro tipo de enfermedades derivadas de los ritmos. Otro enfoque muy llamativo sería intentar juntar varias bases de datos en una sola, ya que como el modelo aprende de la base de datos, al englobar señales procedentes y tomadas de distintas fuentes podría dar a lugar a un modelo que no se ajuste a las peculiaridades de las bases de datos en sí, logrando una mayor generalización. Para mitigar el desbalanceo de clases en caso de no poder ampliar la base de datos, se podría estudiar propuestas de aumento de datos más sofisticadas que contribuyan de manera positiva al aprendizaje del modelo. \\
+    
+    Otro problema que ya se comento es la dificultad que tienen lo modelos de la competición para distinguir entre algunos electrocardiogramas sanos y otros que presentan una patología distinta a la fibrilación auricular. Otros modelos, como CNN, LSTM y GRU en cambio presentan el problema de la mala distinción entre ritmos sanos y ritmos ruidosos además de una clasificación incorrecta de las FA.  Como propuesta se podría usar un enfoque parecido al clasificador binario en cascada pero de manera más sofisticada, puesto que ese modelo presenta igualmente este problema. De todos modos, la idea en la que se separan los electrocardiagramas sanos de los no sanos para después volver a clasificarlos no es nada a descartar. Aplicar otros modelos con un enfoque parecido a los ganadores de la competición no sería nada descabellado e incluso se podrían obtener buenos resultados intentando mejorarlos. Empleando una fase para una extracción fina de características de las señales y otra fase para clasificar como por ejemplo el enfoque EnCaSe. No sería mala la idea de intentar otros algoritmos como por ejemplo XGBoost o LightGBM o usar ensembles y aplicar técnicas como boosting, votación por mayoría, stacking o Bagging. También se podría intentar refinar los modelos CNN, LSTM y GRU aplicando un estudio experimental mucho más amplio con el objetivo de mejorar los resultados obtenidos.  \\

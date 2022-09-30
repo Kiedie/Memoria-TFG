@@ -1,0 +1,79 @@
+% !TeX root = ../libro.tex
+% !TeX encoding = utf8
+
+\setchapterpreamble[c][0.90\linewidth]{%
+	\sffamily
+  
+	\par\bigskip
+}
+
+\chapter{Introducción}\label{ch:introducion}
+
+    
+    
+\section{Contextualiación}
+
+    El gran avance en inteligencia artificial que se ha logrado en los últimos años se pone en vista de mejorar tanto la esperanza de vida como la calidad de la misma del ser humano. Un aspecto importante a tratar son las enfermedades que amenazan la vida de una persona como por ejemplo el cáncer, problemas cardíacos o serios problemas mentales. El contexto en el que vamos a trabajar se centra en un tipo de problema cardíaco, en concreto, la fibrilación auricular, que es un ritmo irregular en los latidos del corazón (arritmia). Este problema afecta no a miles, sino a millones de personas de todo el mundo cada año marcando un antes y un después en la calidad de sus vidas y en los peores de los casos, trayendo consigo la muerte. Esta patología no entiende de género ni de edades, aunque es más común en la población de edad avanzada. No obstante, en los últimos año se ha observado un incremento de esta afección en la población adulta y en jóvenes. \\
+    
+    Hasta no hace mucho el enfoque que se ha usado para abordar este problema con inteligencia artificial ha sido aplicar técnicas de aprendizaje a un conjunto de características extraídas manualmente por un experto. Esto supone el inconveniente de la necesidad de adquirir conocimiento a priori sobre un tema tan específico como este. En este proyecto usaremos un enfoque surgido no hace mucho y en el que la extracción de características no depende del experto, sino del propio modelo. En concreto, se ha recurrido a redes neuronales convolucionales y a redes neuronales recurrientes (LSTM y GRU) para abordarlo. Las primeras se encargan de extraer características de las señales temporales y las segundas se encargan de procesarlas teniendo en cuenta un factor clave, el tiempo. \\
+    
+    Este enfoque, que aplica el llamado aprendizaje profundo tiene una justificación teórica por detrás que certifica la alta capacidad de elaborar soluciones correctamente aproximadas. Esta teoría será estudiada más adelante, que junto con una explicación de las técnicas empleadas se procederá a resolver el problema. \\
+    
+    
+
+
+\section{Descripción del problema}
+    
+    Una vez entrados en contexto y entendido las bases teóricas del aprendizaje estadístico que se presentarán en la segunda parte, buscamos desarrollar un modelo de aprendizaje profundo para la clasificación de arritmias, en concreto, buscamos distinguir entre ritmos que estén sanos y fibrilaciones auriculares y distinguir esta última patología frente a otras, para ello se clasificarán en cuatro clases: ritmos normales, ritmos con fibrilación auricular, ritmos con otras patologías y ritmos con ruido. Esta última clase se debe a las interferencias debido al ECG, muchas veces la presencia de ruido en la señal es tan elevada que resulta difícil su clasificación incluso si es el propio médico el que lo clasifica. \\
+    
+    Los modelos propuestos se basan en redes neuronales convolucionales y combinaciones de estas con redes neuronales recurrentes, en particular se emplean LSTM y GRU. De este modo surgirán tres propuestas, un modelo puramente CNN, otro que combina CNN y LSTM y el última que consta de la combinación de CNN y GRU. Los modelos propuestos se compararán con otros existentes en la literatura y con los modelos ganadores de una competición en la que se empleó la misma base de datos que hemos usado. \\
+    
+    Adelantamos que en términos generales, todos los modelos, tantos los propios, como los ganadores de la competición y los encontrados en la literatura presentan unos resultados que dejan bastante que desear. Esto es debido a la naturaleza de la base de datos. Sin embargo, las propuestas de modelo propias gozan de buenos resultados aunque no consigan mejorar a los modelos ganadores de la competición. \\
+    
+\section{Estructura del trabajo}
+
+    Este trabajo se estructura en 5 partes bien diferenciadas cada una de las cuales se divide en un conjunto de capítulos. La estructura del proyecto respecta las directrices impuestas para los trabajos fin de grado.
+    
+    \begin{itemize}
+        \item Primera parte: Esta es la parte en donde nos encontramos y está compuesta los dos primeros capítulos (\ref{ch:introducion} y \ref{ch:objetivos}). En el primero presentamos una introducción al proyecto y en el segundo los objetivos planteados al inicio del mismo.
+        \item Segunda parte: Esta es la parte dedicada a la titulación de matemáticas. Consta de los capítulos \ref{ch:FundamentosMatematicos}, \ref{ch:DesigualdadHoeffding}, \ref{ch:AprendizajeEstadistico} y \ref{ch:TAUniversal} en los cuales se detallan las bases del aprendizaje estadístico y el teorema de la aproximación universal. 
+        \item Tercera parte: Esta parte consta de los capítulos \ref{ch:MLP}, \ref{ch:CNN} y \ref{ch:RNN} y está dedicada a explicar los tres tipos de redes neuronales que se van a emplear en la práctica: redes neuronales prealimentadas, redes neuronales convolucionales y redes neuronales recurrentes. Los desarrollos matemáticos presentes en estos capítulos son los propios del grado de la ingeniería informática.
+        \item Cuarta Parte: Esta parte la cual consta de los capítulos \ref{ch:descripcion_problema}, \ref{ch:contexto_experimental}, \ref{ch:desarrollo} y \ref{ch:analisis} está dedicada al desarrollo del proyecto y a la experimentación. El primer capítulo hace una descripción más detallada sobre el problema, el segundo aborda la algunos aspectos más técnicos como el software desarrollado, la métrica empleada, el método de selección de los modelos y el preprocesado empleado. El tercer capítulo desarrolla los modelos que se han usado y el último expone los resultados y el análisis.
+        \item Quinta Parte: Esta parte consta del capítulo \ref{ch:Conclusiones} y se recogen las conclusiones obtenidas a lo largo del trabajo y el trabajo futuro.
+    \end{itemize}
+    
+    
+\section{Herramientas Matemáticas e Informáticas.}
+
+    Para la elaboración de este trabajo se han visto involucradas diversas áreas de las matemáticas. La teoría de la medida junto con algunos resultados de integración han sido necesarios para sentar las bases de la teoría de la probabilidad en la cual nos apoyaremos para introducir el marco teórico del aprendizaje estadístico. También se han abarcado conceptos del área de la inferencia estadística, la topología y de álgebra lineal. Otra gran área de las matemáticas a la que se ha recurrido ha sido al análisis funcional, indispensable para el teorema del aproximación universal. \\
+    
+    En la parte de la informática también se han recurridos a bastantes áreas, entre ellas destacamos el área de la visión por computador y el aprendizaje automático. Algunos conceptos de inteligencia de negocio también han jugado un importante papel. Los conocimientos adquiridos en las asignaturas de estructura de datos, metodología de la programación y programación y diseño orientado a objetos también se han visto involucrados en el proceso de desarrollo de software. \\
+    
+    El proyecto se ha diseñado en el lenguaje Python. Python es un lenguaje interpretado versátil e intuitivo que cuenta con numerosas librerías y herramientas diseñadas específicamente para ciencia de datos y aprendizaje automático. Además es un lenguaje de programación bastante flexible y portable. \\
+    
+    Se han usado numerosas librerías las cuales se muestran junto con su versión en el fichero \textit{requirement.txt} del proyecto. Entre todas ellas destacamos Tensorflow, Keras, Numpy, Pandas, Seaborn y Matplotlib. Tensorflow y Keras se fusionaron y actúan bajo una misma librería y La hemos usado para la construcción de la arquitectura de los modelos. Numpy es una librería de cálculo numérico eficiente por operar de manera paralela y estar escrita de manera muy optimizada en C++. Por otro lado, hemos usado Pandas para manejo de estructuras y dataframes a la hora de almacenar y mostrar los resultados. Finalmente, Matplotlib y Seaborn, que son dos librerías dedicadas a visualización, han sido útiles para la impresión de elementos gráficos. \\
+    
+    
+\section{Bibliografía Fundamental}
+
+    La bibliografía empleada en la elaboración de este documento ha sido muy amplia y variada pero destacamos a continuación aquellos escritos que han sido fundamentales:
+    
+    \begin{itemize}
+        
+        \item Para la elaboración del capítulo \ref{ch:FundamentosMatematicos}, \textit{Fundamentos Matemáticos} y la elaboración del capítulo \ref{ch:DesigualdadHoeffding}, \textit{Desigualdad de Hoeffding} destacamos dos importantes libros de probabilidad muy extensos y completos: \textit{An Introduction to Probability and Statistics} \cite{Rohatgi2000}  y \textit{Probability Theory: A Comprehensive Course} \cite{probcourse}
+        
+        \item Para la elaboración del capítulo \ref{ch:AprendizajeEstadistico}, \textit{Teoría del Aprendizaje Estadístico} se ha consultado muchos libros de referencia, entre ellos destacamos el libro \textit{Learning from Data} \cite{data} escrito por Yaser S. Abu-Mostafa, Malik Magdon-Ismail y Hsuan-Tien Lin, en donde abundan explicaciones sencillas e intuitivas. Destacamos también el libro \textit{Understanding Machine Learning} \cite{UML} escrito por Shai Shalev-Shwartz and Shai Ben-David. Este libro es bastante más riguroso y matemático que el anterior.
+    
+        \item El artículo publicado por George Cybenki \cite{TeoremaAproxUni} se ha empleado para la elaboración del capítulo \ref{ch:TAUniversal}, \textit{Teorema de Aproximación Universal}.
+        
+        \item El libro \textit{Deep Learning Book} \cite{Goodfellow-et-al-2016} escrito por Goodfellow, Courville y Bengio ha sido una referencia fundamental para la elaboración de los capítulos \ref{ch:MLP}, \ref{ch:CNN} y \ref{ch:RNN} correspondientes a las redes neuronales prealimentadas, convoluciones y recurrentes respectivamente. Este libro es bastante extenso y explica al detalle toda la teoría detrás del aprendizaje profundo. \\
+        
+    \end{itemize}
+
+    
+    
+    
+
+
+
+\endinput
